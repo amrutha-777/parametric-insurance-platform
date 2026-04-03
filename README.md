@@ -177,7 +177,7 @@ Admin Dashboard:
 
 ## Tech Stack
 
-- Frontend: React or Streamlit  
+- Frontend: Streamlit  
 - Backend: Python (Flask or Django)  
 - Database: MongoDB  
 - APIs: Weather API  
