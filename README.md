@@ -72,6 +72,7 @@ We propose an AI-powered parametric insurance platform that:
 ---
 
 ## Parametric Triggers
+All payouts are strictly based on loss of income due to external disruptions. The platform does not cover health, accidents, or vehicle-related damages, ensuring compliance with the defined scope.
 
 Automatic payout when:
 
