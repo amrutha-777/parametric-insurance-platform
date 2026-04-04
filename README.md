@@ -263,6 +263,61 @@ Automatic payout when:
 GigShield transforms insurance from a **manual, slow process** into a **fully automated income protection system**, making financial security accessible to millions of gig workers.
 
 ---
+## ▶️ How to Run Locally
+
+### 🔧 Backend (Flask)
+
+1. Navigate to backend folder:
+cd backend
+
+2. Install dependencies:
+pip install -r requirements.txt
+
+3. Run the server:
+python app.py
+
+Backend will run on:
+http://127.0.0.1:5000/
+
+---
+
+### 🌐 Frontend
+
+Simple HTML:
+cd frontend
+Open index.html or use Live Server (VS Code)
+
+React (if applicable):
+npm install
+npm start
+
+---
+
+### 🔗 Connect Frontend & Backend
+
+Ensure API calls use:
+http://127.0.0.1:5000/api/...
+
+---
+
+### ⚠️ Common Issues
+
+CORS Error:
+from flask_cors import CORS
+CORS(app)
+
+Module not found:
+pip install <module-name>
+
+---
+
+### ✅ Steps to Run
+
+1. Start backend  
+2. Open frontend  
+3. Use the application 🎉
+
+---
 
 ## 🏆 Final Note
 
