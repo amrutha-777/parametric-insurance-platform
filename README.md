@@ -1,12 +1,12 @@
-# 🚀 GigShield — AI-Powered Parametric Insurance for Gig Workers
+# 🚀 Vayurox — AI-Powered Parametric Insurance for Gig Workers
 
-**“From claims to code — GigShield redefines insurance with AI.”**
+**“From claims to code — Vayurox redefines insurance with AI.”**
 
 ---
 
 ## 📖 Overview
 
-GigShield is an AI-powered parametric insurance platform designed for India’s gig economy workers (Zomato, Swiggy, Blinkit, etc.).
+Vayurox is an AI-powered parametric insurance platform designed for India’s gig economy workers (Zomato, Swiggy, Blinkit, etc.).
 
 It protects delivery partners from income loss caused by external disruptions such as heavy rainfall, high air pollution (AQI), platform outages, and local restrictions — through **instant, automated payouts with zero manual claims**.
 
@@ -42,13 +42,13 @@ Delivery partners depend on daily earnings. However, external disruptions can re
 
 Ravi, a delivery partner, logs in during peak hours. Sudden heavy rain reduces orders drastically. He loses his daily income with no backup.
 
-👉 GigShield ensures **automatic compensation** for such losses.
+👉 Vayurox ensures **automatic compensation** for such losses.
 
 ---
 
 ## 🚀 Solution
 
-GigShield uses **AI + Parametric Insurance** to:
+Vayurox uses **AI + Parametric Insurance** to:
 
 - Provide weekly subscription-based insurance  
 - Monitor real-time disruption data  
@@ -260,7 +260,7 @@ Automatic payout when:
 
 ## 🌍 Impact
 
-GigShield transforms insurance from a **manual, slow process** into a **fully automated income protection system**, making financial security accessible to millions of gig workers.
+Vayurox transforms insurance from a **manual, slow process** into a **fully automated income protection system**, making financial security accessible to millions of gig workers.
 
 ---
 ## ▶️ How to Run Locally
@@ -321,4 +321,4 @@ pip install <module-name>
 
 ## 🏆 Final Note
 
-GigShield bridges the gap between **technology and financial safety**, ensuring gig workers are protected when they need it the most.
+Vayurox bridges the gap between **technology and financial safety**, ensuring gig workers are protected when they need it the most.
