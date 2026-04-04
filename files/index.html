@@ -1,0 +1,2775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GigShield — AI Parametric Insurance for Gig Workers</title>
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+/* ═══════════════════════════════════════════════
+   GIGSHIELD DESIGN SYSTEM
+   Theme: Dark industrial with electric orange
+   Fonts: Cabinet Grotesk + Instrument Sans
+═══════════════════════════════════════════════ */
+:root {
+  --bg: #0F0E0C;
+  --bg-2: #181714;
+  --bg-3: #221F1B;
+  --bg-4: #2C2822;
+  --border: rgba(255,255,255,0.07);
+  --border-2: rgba(255,255,255,0.13);
+  --border-3: rgba(255,255,255,0.22);
+
+  --ink: #F5F0EB;
+  --ink-2: #B8AFA6;
+  --ink-3: #7A7169;
+  --ink-4: #4A443E;
+
+  --brand: #FF5C00;
+  --brand-2: #FF7A2E;
+  --brand-glow: rgba(255,92,0,0.15);
+  --brand-light: rgba(255,92,0,0.08);
+
+  --success: #3DC98B;
+  --success-bg: rgba(61,201,139,0.1);
+  --warning: #F5A623;
+  --warning-bg: rgba(245,166,35,0.1);
+  --danger: #FF4444;
+  --danger-bg: rgba(255,68,68,0.1);
+  --info: #4DA6FF;
+  --info-bg: rgba(77,166,255,0.1);
+
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 20px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 15px; }
+
+body {
+  font-family: 'Instrument Sans', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,h2,h3,h4,h5 {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-2); }
+::-webkit-scrollbar-thumb { background: var(--bg-4); border-radius: 3px; }
+
+/* LAYOUT */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 220px;
+  background: var(--bg-2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.sidebar-logo {
+  padding: 22px 20px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo-text {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: var(--ink);
+}
+
+.logo-accent { color: var(--brand); }
+
+.logo-tagline {
+  font-size: 10px;
+  color: var(--ink-3);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.sidebar-section-label {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  padding: 14px 20px 6px;
+  font-weight: 600;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 8px 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 10px;
+  border: none;
+  background: none;
+  color: var(--ink-3);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 8px;
+  text-align: left;
+  transition: all 0.15s;
+}
+
+.nav-btn:hover { background: var(--bg-3); color: var(--ink-2); }
+
+.nav-btn.active {
+  background: var(--brand-light);
+  color: var(--brand);
+  font-weight: 600;
+}
+
+.nav-btn.active .nav-icon { opacity: 1; }
+
+.nav-icon {
+  width: 18px;
+  text-align: center;
+  font-size: 14px;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+.nav-btn.active .nav-icon { opacity: 1; }
+
+.sidebar-bottom {
+  padding: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.user-card {
+  background: var(--bg-3);
+  border-radius: var(--r-md);
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 900;
+  color: white;
+  flex-shrink: 0;
+}
+
+.user-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-role-badge {
+  font-size: 10px;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* MAIN */
+.main-content {
+  margin-left: 220px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.topbar {
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.topbar-title {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.live-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--success-bg);
+  color: var(--success);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(61,201,139,0.2);
+}
+
+.live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+  animation: livePulse 1.5s infinite;
+}
+
+@keyframes livePulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+.logout-btn {
+  background: var(--bg-3);
+  border: 1px solid var(--border-2);
+  color: var(--ink-2);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.logout-btn:hover { border-color: var(--border-3); color: var(--ink); }
+
+.page { padding: 28px; }
+
+/* CARDS */
+.card {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 20px 22px;
+}
+
+.card-dark {
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 20px 22px;
+}
+
+.card-brand {
+  background: var(--brand-light);
+  border: 1px solid rgba(255,92,0,0.2);
+  border-radius: var(--r-lg);
+  padding: 20px 22px;
+}
+
+/* METRICS */
+.metric-grid { display: grid; gap: 14px; }
+.g-4 { grid-template-columns: repeat(4, 1fr); }
+.g-3 { grid-template-columns: repeat(3, 1fr); }
+.g-2 { grid-template-columns: repeat(2, 1fr); }
+
+.metric-card {
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 16px 18px;
+}
+
+.metric-label {
+  font-size: 11px;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.metric-value {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.metric-value.brand { color: var(--brand); }
+.metric-value.success { color: var(--success); }
+.metric-value.danger { color: var(--danger); }
+
+.metric-sub {
+  font-size: 11px;
+  color: var(--ink-3);
+  margin-top: 5px;
+}
+
+.metric-up { color: var(--success); }
+.metric-down { color: var(--danger); }
+
+/* SECTION */
+.section { margin-bottom: 24px; }
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.section-title {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: 0.2px;
+}
+
+/* BUTTONS */
+.btn {
+  font-family: 'Instrument Sans', sans-serif;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.btn-brand {
+  background: var(--brand);
+  color: #fff;
+}
+
+.btn-brand:hover { background: var(--brand-2); }
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border-2);
+  color: var(--ink-2);
+}
+
+.btn-outline:hover { border-color: var(--border-3); color: var(--ink); }
+
+.btn-success {
+  background: var(--success-bg);
+  color: var(--success);
+  border: 1px solid rgba(61,201,139,0.25);
+}
+
+.btn-danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid rgba(255,68,68,0.25);
+}
+
+.btn-sm {
+  font-size: 12px;
+  padding: 6px 14px;
+  border-radius: var(--r-sm);
+}
+
+.btn-lg {
+  font-size: 15px;
+  padding: 13px 26px;
+  border-radius: var(--r-lg);
+}
+
+.btn-full { width: 100%; }
+
+/* BADGES */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.2px;
+}
+
+.badge-success { background: var(--success-bg); color: var(--success); }
+.badge-warning { background: var(--warning-bg); color: var(--warning); }
+.badge-danger { background: var(--danger-bg); color: var(--danger); }
+.badge-info { background: var(--info-bg); color: var(--info); }
+.badge-brand { background: var(--brand-light); color: var(--brand); }
+.badge-neutral { background: var(--bg-4); color: var(--ink-2); }
+
+/* FORMS */
+.form-group { margin-bottom: 16px; }
+
+.form-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-2);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.form-input, .form-select {
+  width: 100%;
+  background: var(--bg-3);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-sm);
+  padding: 10px 14px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s;
+  appearance: none;
+}
+
+.form-input:focus, .form-select:focus {
+  border-color: var(--brand);
+}
+
+.form-input::placeholder { color: var(--ink-4); }
+
+/* TABLE */
+.table-wrap { overflow-x: auto; }
+
+table { width: 100%; border-collapse: collapse; }
+
+th {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+td {
+  padding: 12px 14px;
+  font-size: 13.5px;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink-2);
+}
+
+tr:last-child td { border-bottom: none; }
+
+tr:hover td { background: var(--bg-3); }
+
+/* PROGRESS */
+.progress-bar {
+  background: var(--bg-4);
+  border-radius: 100px;
+  height: 6px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 0.6s ease;
+}
+
+/* RISK SCORE RING */
+.risk-ring-wrap {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* FLOW STEPS */
+.flow-step {
+  display: flex;
+  gap: 14px;
+  padding-bottom: 20px;
+  position: relative;
+}
+
+.flow-step::before {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: 32px;
+  bottom: 0;
+  width: 1px;
+  background: var(--border-2);
+}
+
+.flow-step:last-child::before { display: none; }
+
+.flow-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  flex-shrink: 0;
+  z-index: 1;
+  position: relative;
+}
+
+.flow-done { background: var(--success-bg); color: var(--success); }
+.flow-active { background: var(--brand); color: #fff; }
+.flow-pending { background: var(--bg-4); color: var(--ink-3); }
+.flow-failed { background: var(--danger-bg); color: var(--danger); }
+
+.flow-body { flex: 1; padding-top: 4px; }
+.flow-title { font-size: 13px; font-weight: 600; color: var(--ink); }
+.flow-desc { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+
+/* ALERTS */
+.alert {
+  display: flex;
+  gap: 12px;
+  padding: 13px 16px;
+  border-radius: var(--r-md);
+  font-size: 13.5px;
+}
+
+.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.alert-success { background: var(--success-bg); color: #a8edcd; border: 1px solid rgba(61,201,139,0.2); }
+.alert-warning { background: var(--warning-bg); color: #f5c86a; border: 1px solid rgba(245,166,35,0.2); }
+.alert-danger { background: var(--danger-bg); color: #ff8a8a; border: 1px solid rgba(255,68,68,0.2); }
+.alert-info { background: var(--info-bg); color: #80c2ff; border: 1px solid rgba(77,166,255,0.2); }
+
+/* DISRUPTION CARD */
+.disruption-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.disruption-item:last-child { border-bottom: none; }
+
+.dis-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* TAG SELECTOR */
+.tag-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 6px 13px;
+  border-radius: 20px;
+  border: 1px solid var(--border-2);
+  cursor: pointer;
+  transition: all 0.15s;
+  background: var(--bg-3);
+  color: var(--ink-2);
+}
+
+.tag:hover { border-color: var(--border-3); color: var(--ink); }
+
+.tag.active {
+  background: var(--brand-light);
+  border-color: rgba(255,92,0,0.35);
+  color: var(--brand);
+}
+
+/* PAYOUT HERO */
+.payout-hero {
+  background: var(--brand);
+  border-radius: var(--r-xl);
+  padding: 22px 24px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.payout-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -40px; right: -20px;
+  width: 130px; height: 130px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+}
+
+/* TOGGLE */
+.toggle-row {
+  display: flex;
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 3px;
+  gap: 2px;
+}
+
+.toggle-opt {
+  flex: 1;
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: var(--ink-3);
+  transition: all 0.15s;
+  font-family: 'Instrument Sans', sans-serif;
+  text-align: center;
+}
+
+.toggle-opt.active {
+  background: var(--bg);
+  color: var(--ink);
+  border: 1px solid var(--border-2);
+}
+
+/* SCORE DISPLAY */
+.score-display {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.score-ring {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+}
+
+.score-ring svg {
+  transform: rotate(-90deg);
+}
+
+.score-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* AI BARS */
+.ai-bar-item { margin-bottom: 14px; }
+
+.ai-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--ink-2);
+  margin-bottom: 6px;
+}
+
+.ai-bar {
+  height: 7px;
+  background: var(--bg-4);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.ai-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 1s ease;
+}
+
+/* PREMIUM BREAKDOWN */
+.prem-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+}
+
+.prem-row:last-child { border-bottom: none; }
+.prem-label { color: var(--ink-3); }
+.prem-val { font-weight: 600; }
+.prem-pos { color: var(--danger); }
+.prem-neg { color: var(--success); }
+
+/* HEATMAP */
+.heatmap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+
+.heatmap-cell {
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 12px;
+  text-align: center;
+}
+
+/* CLAIM FORM */
+.claim-form-grid { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
+
+/* RANGE */
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--bg-4);
+  outline: none;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--brand);
+  cursor: pointer;
+}
+
+/* AUTH SCREEN */
+.auth-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--bg);
+  background-image: radial-gradient(ellipse at 20% 50%, rgba(255,92,0,0.05) 0%, transparent 60%);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--bg-2);
+  border: 1px solid var(--border-2);
+  border-radius: 24px;
+  padding: 36px;
+}
+
+.auth-logo {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.auth-logo-text {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+.auth-logo-sub {
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-top: 4px;
+  letter-spacing: 0.3px;
+}
+
+.auth-title {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.auth-sub { font-size: 13px; color: var(--ink-3); margin-bottom: 24px; }
+
+.auth-role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+
+.role-card {
+  background: var(--bg-3);
+  border: 1.5px solid var(--border-2);
+  border-radius: var(--r-md);
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+
+.role-card:hover { border-color: var(--border-3); }
+.role-card.selected { border-color: var(--brand); background: var(--brand-light); }
+.role-icon { font-size: 24px; margin-bottom: 6px; }
+.role-name { font-size: 13px; font-weight: 600; }
+
+.auth-tab-row {
+  display: flex;
+  gap: 0;
+  background: var(--bg-3);
+  border-radius: var(--r-md);
+  padding: 3px;
+  margin-bottom: 24px;
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  background: none;
+  color: var(--ink-3);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Instrument Sans', sans-serif;
+  transition: all 0.15s;
+}
+
+.auth-tab.active { background: var(--bg); color: var(--ink); border: 1px solid var(--border-2); }
+
+.demo-hint {
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 12px;
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.demo-hint strong { color: var(--brand); }
+
+/* TICKER */
+.ticker {
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 10px 16px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  overflow-x: auto;
+  margin-bottom: 22px;
+  flex-wrap: nowrap;
+}
+
+.ticker-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex-shrink: 0;
+}
+
+.ticker-label { font-size: 10px; color: var(--ink-4); text-transform: uppercase; letter-spacing: 0.6px; }
+.ticker-val { font-family: 'Cabinet Grotesk', sans-serif; font-size: 13px; font-weight: 700; color: var(--ink); }
+.ticker-div { width: 1px; height: 28px; background: var(--border); flex-shrink: 0; }
+
+/* MODAL */
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 300;
+}
+
+.modal {
+  background: var(--bg-2);
+  border: 1px solid var(--border-2);
+  border-radius: 24px;
+  padding: 32px;
+  width: 100%;
+  max-width: 440px;
+  text-align: center;
+}
+
+/* PREDICTION CARD */
+.pred-card {
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.pred-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* CHART */
+.chart-container { position: relative; height: 200px; }
+
+/* SHIELD SCORE */
+.shield-score {
+  background: linear-gradient(135deg, #1a1714 0%, #2c2822 100%);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  text-align: center;
+}
+
+/* FLEX UTILS */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.gap-4 { gap: 16px; }
+.gap-5 { gap: 20px; }
+.flex-1 { flex: 1; }
+.flex-wrap { flex-wrap: wrap; }
+.mt-1 { margin-top: 4px; }
+.mt-2 { margin-top: 8px; }
+.mt-3 { margin-top: 12px; }
+.mt-4 { margin-top: 16px; }
+.mb-1 { margin-bottom: 4px; }
+.mb-2 { margin-bottom: 8px; }
+.mb-3 { margin-bottom: 12px; }
+.mb-4 { margin-bottom: 16px; }
+.text-sm { font-size: 12.5px; }
+.text-xs { font-size: 11.5px; }
+.text-muted { color: var(--ink-3); }
+.text-brand { color: var(--brand); }
+.text-success { color: var(--success); }
+.text-danger { color: var(--danger); }
+.text-warning { color: var(--warning); }
+.font-bold { font-weight: 700; }
+.font-600 { font-weight: 600; }
+.text-center { text-align: center; }
+.w-full { width: 100%; }
+
+/* Responsive grid helper */
+.grid-layout { display: grid; gap: 16px; }
+.g-2-1 { grid-template-columns: 2fr 1fr; }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-up { animation: fadeUp 0.3s ease; }
+
+@keyframes shimmer {
+  0%,100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+
+// ─────────────────────────────────────────────
+// API CONFIG — change this to your Render URL after deploying
+// ─────────────────────────────────────────────
+const API_BASE = window.location.hostname === 'localhost'
+  ? 'http://localhost:5000/api'
+  : 'https://gigshield-api.onrender.com/api';
+
+// MOCK API fallback for demo when backend not running
+const MOCK_MODE = true; // set to false when backend is live
+
+async function api(endpoint, method = 'GET', body = null) {
+  if (MOCK_MODE) return mockApi(endpoint, method, body);
+  try {
+    const opts = {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+    };
+    if (body) opts.body = JSON.stringify(body);
+    const res = await fetch(`${API_BASE}${endpoint}`, opts);
+    return res.json();
+  } catch (e) {
+    return mockApi(endpoint, method, body);
+  }
+}
+
+// ─────────────────────────────────────────────
+// MOCK API — full simulation of backend
+// ─────────────────────────────────────────────
+const mockDB = {
+  users: {
+    'usr_worker_demo': {
+      id: 'usr_worker_demo', name: 'Ravi Kumar', email: 'ravi@demo.com',
+      role: 'worker', city: 'Mumbai', zone: 'Andheri West', platform: 'Zomato',
+      avg_weekly_earnings: 4200, work_hours_per_day: 8, tenure_months: 6
+    },
+    'usr_insurer_demo': {
+      id: 'usr_insurer_demo', name: 'Priya Sharma', email: 'insurer@demo.com',
+      role: 'insurer', company: 'GigShield Insurance Ltd.'
+    }
+  },
+  policies: {
+    'POL_DEMO01': {
+      id: 'POL_DEMO01', user_id: 'usr_worker_demo', plan: 'standard',
+      status: 'active', weekly_premium: 149, coverage_limit: 2682,
+      payout_this_week: 850, triggers: ['rain','aqi','platform','curfew'],
+      risk_score: 0.68,
+      valid_until: new Date(Date.now() + 4 * 86400000).toISOString(),
+      auto_renew: true,
+      premium_breakdown: { base: 80, rain_adj: 30, aqi_adj: 16, platform_adj: 3, hours_adj: 8, loyalty_disc: 15, ml_disc: 7 }
+    }
+  },
+  claims: {
+    'CLM_DEMO01': { id: 'CLM_DEMO01', user_id: 'usr_worker_demo', claim_type: 'rain', hours_lost: 4, payout: 200, status: 'approved', date: new Date(Date.now()-86400000).toISOString(), auto_triggered: true, fraud_result: {is_fraud: false, flags:[]} },
+    'CLM_DEMO02': { id: 'CLM_DEMO02', user_id: 'usr_worker_demo', claim_type: 'aqi', hours_lost: 3, payout: 150, status: 'approved', date: new Date(Date.now()-172800000).toISOString(), auto_triggered: true, fraud_result: {is_fraud: false, flags:[]} },
+    'CLM_DEMO03': { id: 'CLM_DEMO03', user_id: 'usr_worker_demo', claim_type: 'platform', hours_lost: 2, payout: 100, status: 'approved', date: new Date(Date.now()-259200000).toISOString(), auto_triggered: true, fraud_result: {is_fraud: false, flags:[]} },
+  }
+};
+
+let claimCounter = 10;
+
+function mockApi(endpoint, method, body) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      // LOGIN
+      if (endpoint === '/login') {
+        const { email, password } = body;
+        if (email === 'ravi@demo.com' && password === 'demo123') {
+          resolve({ token: 'token_usr_worker_demo', user_id: 'usr_worker_demo', name: 'Ravi Kumar', role: 'worker', city: 'Mumbai' });
+        } else if (email === 'insurer@demo.com' && password === 'admin123') {
+          resolve({ token: 'token_usr_insurer_demo', user_id: 'usr_insurer_demo', name: 'Priya Sharma', role: 'insurer' });
+        } else {
+          resolve({ error: 'Invalid credentials' });
+        }
+        return;
+      }
+
+      // REGISTER
+      if (endpoint === '/register') {
+        const id = 'usr_' + Math.random().toString(36).substr(2, 8);
+        mockDB.users[id] = { id, ...body, password_hash: '' };
+        resolve({ message: 'Registration successful', user_id: id, role: body.role, token: 'token_' + id });
+        return;
+      }
+
+      // RISK
+      if (endpoint.startsWith('/get-risk')) {
+        const userId = new URLSearchParams(endpoint.split('?')[1] || '').get('user_id') || 'usr_worker_demo';
+        const user = mockDB.users[userId] || mockDB.users['usr_worker_demo'];
+        const city = user.city || 'Mumbai';
+        const cityRisk = { Mumbai: {rain:0.85,aqi:0.40}, 'Delhi NCR': {rain:0.45,aqi:0.90}, Bengaluru: {rain:0.55,aqi:0.35}, Hyderabad:{rain:0.50,aqi:0.40}, Chennai:{rain:0.60,aqi:0.35}, Pune:{rain:0.65,aqi:0.30} };
+        const r = cityRisk[city] || {rain:0.5, aqi:0.5};
+        const score = Math.min(0.95, r.rain * 0.5 + r.aqi * 0.3 + 0.1);
+        resolve({
+          risk: {
+            score: parseFloat(score.toFixed(3)),
+            grade: score > 0.65 ? 'HIGH' : score > 0.35 ? 'MEDIUM' : 'LOW',
+            weather_risk: parseFloat((r.rain * 0.6).toFixed(3)),
+            aqi_risk: parseFloat((r.aqi * 0.25).toFixed(3)),
+            platform_risk: 0.038,
+            drivers: score > 0.65 
+              ? ['High rainfall zone increases income disruption risk', 'Seasonal monsoon adds volatility to work availability']
+              : ['Moderate risk profile — standard coverage recommended']
+          },
+          premium: {
+            weekly_premium: 149, base: 80, rain_adj: 30, aqi_adj: 16, platform_adj: 3,
+            hours_adj: 8, loyalty_disc: 15, ml_disc: 7, coverage_limit: 2682, payout_rate_per_hour: 50
+          },
+          weather: {
+            city, rain_mm_per_hr: parseFloat((Math.random() * 45 * r.rain).toFixed(1)),
+            aqi: Math.floor(50 + Math.random() * 200 * r.aqi),
+            temperature_c: parseFloat((28 + Math.random() * 14).toFixed(1)),
+            flood_alert: Math.random() < r.rain * 0.4
+          },
+          platform: { city, order_drop_pct: parseFloat((Math.random() * 55).toFixed(1)) },
+          predictions: [
+            { type: 'Heavy Rainfall', probability: Math.floor(r.rain * 90), window: 'Tomorrow 2PM–8PM', recommended_hours: 'Work 8AM–1PM', severity: 'HIGH' },
+            { type: 'Moderate AQI', probability: Math.floor(r.aqi * 70), window: 'Morning 6–11AM', recommended_hours: 'Avoid morning routes', severity: 'MEDIUM' }
+          ],
+          shield_score: 72
+        });
+        return;
+      }
+
+      // CREATE POLICY
+      if (endpoint === '/create-policy') {
+        const pol = {
+          id: 'POL_' + Math.random().toString(36).substr(2,6).toUpperCase(),
+          user_id: body.user_id, plan: body.plan || 'standard', status: 'active',
+          weekly_premium: 149, coverage_limit: 2682, payout_this_week: 0,
+          triggers: body.triggers || ['rain','aqi','platform','curfew'],
+          risk_score: 0.68,
+          valid_until: new Date(Date.now() + 7 * 86400000).toISOString(),
+          auto_renew: true,
+          premium_breakdown: { base: 80, rain_adj: 30, aqi_adj: 16, platform_adj: 3, hours_adj: 8, loyalty_disc: 15, ml_disc: 7 }
+        };
+        Object.values(mockDB.policies).forEach(p => { if (p.user_id === body.user_id) p.status = 'expired'; });
+        mockDB.policies[pol.id] = pol;
+        resolve({ message: 'Policy created', policy: pol });
+        return;
+      }
+
+      // GET POLICY
+      if (endpoint.startsWith('/get-policy')) {
+        const uid = endpoint.split('/')[2];
+        const policies = Object.values(mockDB.policies).filter(p => p.user_id === uid);
+        resolve({ active_policy: policies.find(p => p.status === 'active') || null, all_policies: policies });
+        return;
+      }
+
+      // TRIGGER CLAIM
+      if (endpoint === '/trigger-claim') {
+        const { user_id, claim_type, hours_lost, auto_triggered } = body;
+        const policy = Object.values(mockDB.policies).find(p => p.user_id === user_id && p.status === 'active');
+        if (!policy) { resolve({ error: 'No active policy' }); return; }
+
+        const isFraud = hours_lost > 12 || Math.random() < 0.06;
+        const payout = isFraud ? 0 : Math.min(hours_lost * 50, policy.coverage_limit - policy.payout_this_week);
+        const status = isFraud ? 'rejected' : 'approved';
+        if (!isFraud) policy.payout_this_week = (policy.payout_this_week || 0) + payout;
+
+        const claimId = 'CLM_' + (claimCounter++).toString().padStart(6, '0');
+        const claim = {
+          id: claimId, user_id, policy_id: policy.id, claim_type, hours_lost,
+          payout: Math.round(payout), status, date: new Date().toISOString(),
+          auto_triggered: !!auto_triggered,
+          trigger_validated: !isFraud,
+          fraud_result: { is_fraud: isFraud, flags: isFraud ? ['Suspicious pattern detected'] : [], verdict: isFraud ? 'REJECTED' : 'APPROVED' },
+          flow: [
+            { step: 'Disruption Detected', status: 'done' },
+            { step: 'Threshold Validated', status: isFraud ? 'failed' : 'done' },
+            { step: 'Fraud Check', status: isFraud ? 'failed' : 'done' },
+            { step: 'Payout Processed', status: isFraud ? 'failed' : 'done', amount: Math.round(payout) }
+          ]
+        };
+        mockDB.claims[claimId] = claim;
+        resolve({ claim, message: status === 'approved' ? `Claim APPROVED: ₹${Math.round(payout)} payout` : 'Claim REJECTED: Suspicious Activity' });
+        return;
+      }
+
+      // GET CLAIMS
+      if (endpoint.startsWith('/get-claims')) {
+        const uid = endpoint.split('/')[2];
+        const claims = Object.values(mockDB.claims).filter(c => c.user_id === uid).sort((a,b) => b.date.localeCompare(a.date));
+        resolve({ claims });
+        return;
+      }
+
+      // INSURER OVERVIEW
+      if (endpoint === '/insurer/overview') {
+        resolve({
+          total_workers: 12847, active_policies: 11203,
+          claims_processed: 2341, fraud_blocked: 138,
+          total_payout: 731250, total_premium: 1668847, loss_ratio: 43.8,
+          city_heatmap: {
+            Mumbai: { policies: 4821, claims: 892, payout: 267800, avg_risk: 0.72 },
+            'Delhi NCR': { policies: 3102, claims: 681, payout: 198400, avg_risk: 0.68 },
+            Bengaluru: { policies: 2447, claims: 421, payout: 142600, avg_risk: 0.55 },
+            Hyderabad: { policies: 1289, claims: 201, payout: 78300, avg_risk: 0.51 },
+            Chennai: { policies: 1188, claims: 146, payout: 44150, avg_risk: 0.48 },
+          }
+        });
+        return;
+      }
+
+      // INSURER DISRUPTIONS
+      if (endpoint === '/insurer/disruptions') {
+        resolve({ events: [
+          { type: 'Heavy Rain', city: 'Mumbai', value: '39mm/hr', affected_workers: 2341, severity: 'HIGH', triggered: true },
+          { type: 'High AQI', city: 'Delhi NCR', value: 'AQI 198', affected_workers: 1089, severity: 'HIGH', triggered: true },
+          { type: 'Platform Slowdown', city: 'Bengaluru', value: 'Orders ↓42%', affected_workers: 487, severity: 'MEDIUM', triggered: true },
+        ], timestamp: new Date().toISOString() });
+        return;
+      }
+
+      // FRAUD DASHBOARD
+      if (endpoint === '/insurer/fraud-dashboard') {
+        resolve({ fraud_cases: [
+          { claim_id: 'CLM_FRD01', user_name: 'Suresh P.', claim_type: 'rain', flags: ['GPS 14km outside claimed zone', '3 claims same day'], date: new Date().toISOString(), status: 'rejected' },
+          { claim_id: 'CLM_FRD02', user_name: 'Mohan R.', claim_type: 'platform', flags: ['Orders completed during claimed outage window'], date: new Date(Date.now()-3600000).toISOString(), status: 'rejected' },
+        ], total_fraud: 138, amount_saved: 412500 });
+        return;
+      }
+
+      // ANALYTICS
+      if (endpoint.startsWith('/analytics')) {
+        resolve({
+          total_saved: 850, total_claims: 7, approved_claims: 6,
+          coverage_utilization: 34,
+          by_disruption_type: {
+            rain: { count: 3, payout: 450 },
+            aqi: { count: 2, payout: 250 },
+            platform: { count: 2, payout: 150 }
+          },
+          weekly_trend: {
+            'Week 1': { saved: 0, claims: 0 }, 'Week 2': { saved: 200, claims: 2 },
+            'Week 3': { saved: 350, claims: 3 }, 'Week 4': { saved: 850, claims: 6 }
+          }
+        });
+        return;
+      }
+
+      resolve({ error: 'Unknown endpoint' });
+    }, 300 + Math.random() * 200);
+  });
+}
+
+// ─────────────────────────────────────────────
+// UTILITY COMPONENTS
+// ─────────────────────────────────────────────
+function Badge({ type, children }) {
+  return <span className={`badge badge-${type}`}>{children}</span>;
+}
+
+function Spinner() {
+  return <div style={{display:'flex',alignItems:'center',justifyContent:'center',padding:'40px'}}>
+    <div style={{width:32,height:32,border:'3px solid var(--bg-4)',borderTopColor:'var(--brand)',borderRadius:'50%',animation:'spin 0.8s linear infinite'}}></div>
+    <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+  </div>;
+}
+
+function ScoreRing({ score, size = 80 }) {
+  const r = size * 0.38;
+  const circ = 2 * Math.PI * r;
+  const pct = Math.min(score, 1);
+  const color = score > 0.65 ? '#FF4444' : score > 0.35 ? '#F5A623' : '#3DC98B';
+  return (
+    <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
+      <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
+        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="var(--bg-4)" strokeWidth={size * 0.1} />
+        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth={size * 0.1}
+          strokeDasharray={circ} strokeDashoffset={circ * (1 - pct)} strokeLinecap="round" style={{transition:'stroke-dashoffset 1s ease'}} />
+      </svg>
+      <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column'}}>
+        <span style={{fontFamily:"'Cabinet Grotesk'",fontWeight:900,fontSize:size*0.22,color}}>{Math.round(score*100)}</span>
+        <span style={{fontSize:size*0.12,color:'var(--ink-3)',letterSpacing:0.5}}>RISK</span>
+      </div>
+    </div>
+  );
+}
+
+function ChartBar({ data, labels, colors }) {
+  const max = Math.max(...data, 1);
+  return (
+    <div style={{display:'flex',alignItems:'flex-end',gap:8,height:120,padding:'0 4px'}}>
+      {data.map((v, i) => (
+        <div key={i} style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',gap:4}}>
+          <div style={{fontSize:10,color:'var(--ink-3)',fontWeight:600}}>{v > 0 ? (v > 999 ? Math.round(v/1000)+'k' : v) : ''}</div>
+          <div style={{width:'100%',background:colors?.[i]||'var(--brand)',borderRadius:'4px 4px 0 0',height:Math.max(4,v/max*90),transition:'height 0.6s ease'}}></div>
+          <div style={{fontSize:10,color:'var(--ink-3)',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis',maxWidth:40}}>{labels[i]}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Toast({ msg, type = 'success', onClose }) {
+  useEffect(() => { const t = setTimeout(onClose, 3500); return () => clearTimeout(t); }, []);
+  const colors = { success: '#3DC98B', danger: '#FF4444', info: '#4DA6FF', warning: '#F5A623' };
+  return (
+    <div style={{position:'fixed',bottom:24,right:24,background:'var(--bg-2)',border:`1px solid ${colors[type]}33`,borderRadius:14,padding:'14px 20px',display:'flex',alignItems:'center',gap:12,zIndex:999,maxWidth:360,boxShadow:'0 8px 32px rgba(0,0,0,0.4)',animation:'fadeUp 0.3s ease'}}>
+      <span style={{fontSize:20}}>{type==='success'?'✅':type==='danger'?'❌':type==='warning'?'⚠️':'ℹ️'}</span>
+      <span style={{fontSize:13,color:'var(--ink-2)'}}>{msg}</span>
+      <button onClick={onClose} style={{background:'none',border:'none',color:'var(--ink-3)',cursor:'pointer',fontSize:16,marginLeft:'auto'}}>✕</button>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// AUTH SCREEN
+// ─────────────────────────────────────────────
+function AuthScreen({ onLogin }) {
+  const [tab, setTab] = useState('login');
+  const [role, setRole] = useState('worker');
+  const [form, setForm] = useState({ name:'', email:'', password:'', city:'Mumbai', platform:'Zomato', avg_weekly_earnings:3500, work_hours_per_day:8, tenure_months:1 });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const setF = (k, v) => setForm(f => ({...f, [k]: v}));
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    setLoading(true); setError('');
+    const res = await api('/login', 'POST', { email: form.email, password: form.password });
+    setLoading(false);
+    if (res.error) { setError(res.error); return; }
+    onLogin(res);
+  }
+
+  async function handleRegister(e) {
+    e.preventDefault();
+    setLoading(true); setError('');
+    const res = await api('/register', 'POST', { ...form, role });
+    setLoading(false);
+    if (res.error) { setError(res.error); return; }
+    onLogin({ ...res, name: form.name, city: form.city, role });
+  }
+
+  return (
+    <div className="auth-wrap">
+      <div className="auth-card fade-up">
+        <div className="auth-logo">
+          <div className="auth-logo-text">
+            Gig<span style={{color:'var(--brand)'}}>Shield</span>
+          </div>
+          <div className="auth-logo-sub">AI Parametric Income Protection</div>
+        </div>
+
+        <div className="auth-tab-row">
+          <button className={`auth-tab ${tab==='login'?'active':''}`} onClick={() => setTab('login')}>Sign In</button>
+          <button className={`auth-tab ${tab==='register'?'active':''}`} onClick={() => setTab('register')}>Register</button>
+        </div>
+
+        {tab === 'login' && (
+          <div className="demo-hint">
+            Demo: <strong>ravi@demo.com / demo123</strong> (Worker) &nbsp;|&nbsp; <strong>insurer@demo.com / admin123</strong> (Insurer)
+          </div>
+        )}
+
+        {error && <div className="alert alert-danger mb-3" style={{marginBottom:16}}><span className="alert-icon">⚠</span> {error}</div>}
+
+        {tab === 'login' ? (
+          <form onSubmit={handleLogin}>
+            <div className="form-group">
+              <label className="form-label">Email</label>
+              <input className="form-input" type="email" placeholder="your@email.com" value={form.email} onChange={e => setF('email', e.target.value)} required />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Password</label>
+              <input className="form-input" type="password" placeholder="••••••••" value={form.password} onChange={e => setF('password', e.target.value)} required />
+            </div>
+            <button className="btn btn-brand btn-full btn-lg" type="submit" disabled={loading} style={{marginTop:8}}>
+              {loading ? 'Signing in...' : 'Sign In →'}
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleRegister}>
+            <div className="auth-role-grid">
+              <div className={`role-card ${role==='worker'?'selected':''}`} onClick={() => setRole('worker')}>
+                <div className="role-icon">🛵</div>
+                <div className="role-name">Delivery Partner</div>
+              </div>
+              <div className={`role-card ${role==='insurer'?'selected':''}`} onClick={() => setRole('insurer')}>
+                <div className="role-icon">🏢</div>
+                <div className="role-name">Insurer / Admin</div>
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Full Name</label>
+              <input className="form-input" placeholder="Ravi Kumar" value={form.name} onChange={e => setF('name', e.target.value)} required />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Email</label>
+              <input className="form-input" type="email" placeholder="you@email.com" value={form.email} onChange={e => setF('email', e.target.value)} required />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Password</label>
+              <input className="form-input" type="password" placeholder="••••••••" value={form.password} onChange={e => setF('password', e.target.value)} required />
+            </div>
+            {role === 'worker' && <>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+                <div className="form-group">
+                  <label className="form-label">City</label>
+                  <select className="form-select" value={form.city} onChange={e => setF('city', e.target.value)}>
+                    {['Mumbai','Delhi NCR','Bengaluru','Hyderabad','Chennai','Pune'].map(c => <option key={c}>{c}</option>)}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Platform</label>
+                  <select className="form-select" value={form.platform} onChange={e => setF('platform', e.target.value)}>
+                    {['Zomato','Swiggy','Blinkit','Zepto','Amazon'].map(p => <option key={p}>{p}</option>)}
+                  </select>
+                </div>
+              </div>
+            </>}
+            <button className="btn btn-brand btn-full btn-lg" type="submit" disabled={loading} style={{marginTop:8}}>
+              {loading ? 'Registering...' : 'Create Account →'}
+            </button>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// WORKER DASHBOARD
+// ─────────────────────────────────────────────
+function WorkerDashboard({ user, onLogout }) {
+  const [screen, setScreen] = useState('overview');
+  const [riskData, setRiskData] = useState(null);
+  const [policy, setPolicy] = useState(null);
+  const [claims, setClaims] = useState([]);
+  const [analytics, setAnalytics] = useState(null);
+  const [toast, setToast] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    Promise.all([
+      api(`/get-risk?user_id=${user.user_id}`),
+      api(`/get-policy/${user.user_id}`),
+      api(`/get-claims/${user.user_id}`),
+      api(`/analytics/${user.user_id}`)
+    ]).then(([r, p, c, a]) => {
+      setRiskData(r);
+      setPolicy(p.active_policy);
+      setClaims(c.claims || []);
+      setAnalytics(a);
+      setLoading(false);
+    });
+  }, []);
+
+  function refreshData() {
+    setLoading(true);
+    Promise.all([
+      api(`/get-risk?user_id=${user.user_id}`),
+      api(`/get-policy/${user.user_id}`),
+      api(`/get-claims/${user.user_id}`),
+      api(`/analytics/${user.user_id}`)
+    ]).then(([r, p, c, a]) => {
+      setRiskData(r);
+      setPolicy(p.active_policy);
+      setClaims(c.claims || []);
+      setAnalytics(a);
+      setLoading(false);
+    });
+  }
+
+  const navItems = [
+    { id:'overview', icon:'⬡', label:'Overview' },
+    { id:'risk', icon:'🧠', label:'AI Risk Profile' },
+    { id:'policy', icon:'◈', label:'My Policy' },
+    { id:'triggers', icon:'⚡', label:'Live Disruptions' },
+    { id:'claims', icon:'💰', label:'Claims' },
+    { id:'predictions', icon:'🔮', label:'Predictions' },
+    { id:'analytics', icon:'📈', label:'Analytics' },
+  ];
+
+  const screenTitles = { overview:'Overview', risk:'AI Risk Profile', policy:'Policy Management', triggers:'Live Disruptions', claims:'Claims', predictions:'Predictive Alerts', analytics:'Analytics' };
+
+  return (
+    <div className="app-shell">
+      {toast && <Toast msg={toast.msg} type={toast.type} onClose={() => setToast(null)} />}
+      <aside className="sidebar">
+        <div className="sidebar-logo">
+          <div className="logo-text">Gig<span className="logo-accent">Shield</span></div>
+          <div className="logo-tagline">Worker Portal</div>
+        </div>
+        <nav className="sidebar-nav">
+          <div className="sidebar-section-label">Menu</div>
+          {navItems.map(n => (
+            <button key={n.id} className={`nav-btn ${screen===n.id?'active':''}`} onClick={() => setScreen(n.id)}>
+              <span className="nav-icon">{n.icon}</span> {n.label}
+            </button>
+          ))}
+        </nav>
+        <div className="sidebar-bottom">
+          <div className="user-card">
+            <div className="user-avatar">{(user.name||'U')[0]}</div>
+            <div style={{flex:1,overflow:'hidden'}}>
+              <div className="user-name">{user.name}</div>
+              <div className="user-role-badge">Delivery Partner</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <main className="main-content">
+        <div className="topbar">
+          <div className="topbar-title">{screenTitles[screen]}</div>
+          <div className="topbar-right">
+            {riskData?.weather?.rain_mm_per_hr > 25 && (
+              <div className="live-pill"><span className="live-dot"></span> Rain Alert Active</div>
+            )}
+            <button className="logout-btn" onClick={onLogout}>Sign Out</button>
+          </div>
+        </div>
+
+        <div className="page fade-up">
+          {loading ? <Spinner /> : (
+            <>
+              {screen === 'overview' && <WorkerOverview user={user} riskData={riskData} policy={policy} analytics={analytics} claims={claims} setScreen={setScreen} setToast={setToast} refreshData={refreshData} />}
+              {screen === 'risk' && <WorkerRisk riskData={riskData} />}
+              {screen === 'policy' && <WorkerPolicy user={user} policy={policy} riskData={riskData} setPolicy={setPolicy} setToast={setToast} refreshData={refreshData} />}
+              {screen === 'triggers' && <WorkerTriggers riskData={riskData} />}
+              {screen === 'claims' && <WorkerClaims user={user} claims={claims} policy={policy} setToast={setToast} refreshData={refreshData} />}
+              {screen === 'predictions' && <WorkerPredictions riskData={riskData} />}
+              {screen === 'analytics' && <WorkerAnalytics analytics={analytics} claims={claims} policy={policy} />}
+            </>
+          )}
+        </div>
+      </main>
+    </div>
+  );
+}
+
+function WorkerOverview({ user, riskData, policy, analytics, claims, setScreen, setToast, refreshData }) {
+  const [autoClaimLoading, setAutoClaimLoading] = useState(false);
+
+  async function simulateAutoTrigger() {
+    if (!policy) { setToast({msg:'No active policy. Buy a policy first.', type:'danger'}); return; }
+    setAutoClaimLoading(true);
+    const triggers = ['rain','aqi','platform'];
+    const t = triggers[Math.floor(Math.random() * triggers.length)];
+    const hours = parseFloat((1 + Math.random() * 4).toFixed(1));
+    const res = await api('/trigger-claim', 'POST', { user_id: user.user_id, claim_type: t, hours_lost: hours, auto_triggered: true });
+    setAutoClaimLoading(false);
+    if (res.claim?.status === 'approved') {
+      setToast({ msg: `⚡ Auto-claim approved! ₹${res.claim.payout} payout initiated for ${t} disruption.`, type: 'success' });
+    } else {
+      setToast({ msg: res.message || 'Claim processed', type: res.claim?.status === 'rejected' ? 'danger' : 'info' });
+    }
+    refreshData();
+  }
+
+  const weather = riskData?.weather || {};
+  const approvedClaims = claims.filter(c => c.status === 'approved');
+  const totalSaved = approvedClaims.reduce((s, c) => s + c.payout, 0);
+
+  return (
+    <div>
+      {/* Ticker */}
+      <div className="ticker">
+        <div className="ticker-item"><div className="ticker-label">City</div><div className="ticker-val">{user.city || 'Mumbai'}</div></div>
+        <div className="ticker-div"></div>
+        <div className="ticker-item"><div className="ticker-label">Rainfall</div><div className="ticker-val" style={{color: weather.rain_mm_per_hr > 25 ? 'var(--danger)' : 'var(--ink)'}}>{weather.rain_mm_per_hr}mm/hr</div></div>
+        <div className="ticker-div"></div>
+        <div className="ticker-item"><div className="ticker-label">AQI</div><div className="ticker-val" style={{color: weather.aqi > 150 ? 'var(--warning)' : 'var(--ink)'}}>{weather.aqi}</div></div>
+        <div className="ticker-div"></div>
+        <div className="ticker-item"><div className="ticker-label">Temp</div><div className="ticker-val">{weather.temperature_c}°C</div></div>
+        <div className="ticker-div"></div>
+        <div className="ticker-item"><div className="ticker-label">Policy</div><div className="ticker-val" style={{color: policy ? 'var(--success)' : 'var(--danger)'}}>{policy ? 'Active ✓' : 'None'}</div></div>
+        <div className="ticker-div"></div>
+        <div className="ticker-item"><div className="ticker-label">Shield Score</div><div className="ticker-val text-brand">{riskData?.shield_score || '--'}/100</div></div>
+      </div>
+
+      {/* Metric cards */}
+      <div className="section">
+        <div className="metric-grid g-4">
+          <div className="metric-card">
+            <div className="metric-label">Weekly Earnings</div>
+            <div className="metric-value">₹{(user.avg_weekly_earnings || 4200).toLocaleString()}</div>
+            <div className="metric-sub">Avg. per week</div>
+          </div>
+          <div className="metric-card">
+            <div className="metric-label">Weekly Premium</div>
+            <div className="metric-value brand">₹{riskData?.premium?.weekly_premium || 149}</div>
+            <div className="metric-sub">AI-computed this week</div>
+          </div>
+          <div className="metric-card">
+            <div className="metric-label">Income Saved</div>
+            <div className="metric-value success">₹{totalSaved.toLocaleString()}</div>
+            <div className="metric-sub metric-up">All-time payouts</div>
+          </div>
+          <div className="metric-card">
+            <div className="metric-label">Coverage Left</div>
+            <div className="metric-value">₹{Math.max(0, (policy?.coverage_limit || 0) - (policy?.payout_this_week || 0)).toLocaleString()}</div>
+            <div className="metric-sub">This week</div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid-layout g-2-1">
+        {/* Left column */}
+        <div>
+          {/* Active disruption + auto claim */}
+          {weather.rain_mm_per_hr > 25 && (
+            <div className="section">
+              <div className="alert alert-danger mb-3">
+                <span className="alert-icon">🌧</span>
+                <div>
+                  <div className="font-bold">Heavy rainfall detected in your zone</div>
+                  <div className="text-sm mt-1">Rainfall: {weather.rain_mm_per_hr}mm/hr — threshold exceeded. You may be eligible for an auto-payout.</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Quick actions */}
+          <div className="section">
+            <div className="section-title mb-3">Quick Actions</div>
+            <div className="flex gap-3">
+              <button className="btn btn-brand" onClick={simulateAutoTrigger} disabled={autoClaimLoading}>
+                {autoClaimLoading ? '⏳ Processing...' : '⚡ Simulate Auto-Claim'}
+              </button>
+              <button className="btn btn-outline" onClick={() => setScreen('policy')}>
+                {policy ? '◈ Manage Policy' : '+ Buy Policy'}
+              </button>
+              <button className="btn btn-outline" onClick={() => setScreen('claims')}>
+                📋 View Claims
+              </button>
+            </div>
+          </div>
+
+          {/* Recent Claims */}
+          <div className="section card">
+            <div className="section-header">
+              <div className="section-title">Recent Claims</div>
+              <Badge type="info">{claims.length} total</Badge>
+            </div>
+            {claims.length === 0 ? (
+              <div className="text-muted text-center" style={{padding:'20px 0'}}>No claims yet. Disruptions auto-trigger claims.</div>
+            ) : (
+              <div className="table-wrap">
+                <table>
+                  <thead><tr><th>Claim</th><th>Type</th><th>Hours</th><th>Payout</th><th>Status</th></tr></thead>
+                  <tbody>
+                    {claims.slice(0, 5).map(c => (
+                      <tr key={c.id}>
+                        <td style={{fontWeight:600,color:'var(--ink)',fontFamily:"'Cabinet Grotesk'"}}>{c.id}</td>
+                        <td>{c.claim_type === 'rain' ? '🌧' : c.claim_type === 'aqi' ? '🏭' : c.claim_type === 'platform' ? '📵' : '🚫'} {c.claim_type}</td>
+                        <td>{c.hours_lost}h</td>
+                        <td style={{color: c.payout > 0 ? 'var(--success)' : 'var(--ink-3)'}}>{c.payout > 0 ? `₹${c.payout}` : '—'}</td>
+                        <td><Badge type={c.status==='approved'?'success':c.status==='rejected'?'danger':'warning'}>{c.status}</Badge></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Right column */}
+        <div>
+          {/* Coverage card */}
+          {policy ? (
+            <div className="section payout-hero">
+              <div style={{fontSize:12,opacity:0.8,marginBottom:4}}>{policy.id}</div>
+              <div style={{fontFamily:"'Cabinet Grotesk'",fontSize:32,fontWeight:900,marginBottom:4}}>₹{policy.weekly_premium}<span style={{fontSize:14,fontWeight:500,opacity:0.7}}>/wk</span></div>
+              <div style={{fontSize:13,opacity:0.7,marginBottom:16}}>Coverage up to ₹{policy.coverage_limit?.toLocaleString()}/week</div>
+              <div style={{background:'rgba(255,255,255,0.2)',borderRadius:100,height:8,marginBottom:8,overflow:'hidden'}}>
+                <div style={{height:'100%',background:'#fff',borderRadius:100,width:`${Math.min(100,(policy.payout_this_week/policy.coverage_limit)*100)}%`,transition:'width 0.6s'}}></div>
+              </div>
+              <div className="flex justify-between" style={{fontSize:12,opacity:0.7}}>
+                <span>₹{policy.payout_this_week?.toLocaleString()} used</span>
+                <span>₹{Math.max(0,policy.coverage_limit - policy.payout_this_week)?.toLocaleString()} left</span>
+              </div>
+            </div>
+          ) : (
+            <div className="section card-brand">
+              <div style={{fontSize:20,marginBottom:8}}>🛡</div>
+              <div className="section-title mb-2">No Active Policy</div>
+              <div className="text-sm text-muted mb-3">Get covered against income disruptions starting ₹{riskData?.premium?.weekly_premium || 149}/week</div>
+              <button className="btn btn-brand btn-full" onClick={() => setScreen('policy')}>Buy Policy →</button>
+            </div>
+          )}
+
+          {/* Shield Score */}
+          <div className="section shield-score">
+            <div className="text-xs text-muted mb-1" style={{letterSpacing:1,textTransform:'uppercase'}}>Income Shield Score</div>
+            <div style={{fontFamily:"'Cabinet Grotesk'",fontSize:48,fontWeight:900,color:'var(--brand)'}}>{riskData?.shield_score || 72}</div>
+            <div className="text-sm text-muted">/100 — {riskData?.shield_score > 70 ? 'Well Protected' : 'Needs Attention'}</div>
+            <div className="progress-bar mt-3">
+              <div className="progress-fill" style={{width:`${riskData?.shield_score || 72}%`,background:'var(--brand)'}}></div>
+            </div>
+          </div>
+
+          {/* Risk summary */}
+          <div className="section card-dark">
+            <div className="section-title mb-3">Risk Summary</div>
+            <div className="flex items-center gap-3">
+              <ScoreRing score={riskData?.risk?.score || 0.68} size={64} />
+              <div>
+                <Badge type={riskData?.risk?.grade==='HIGH'?'danger':riskData?.risk?.grade==='MEDIUM'?'warning':'success'}>{riskData?.risk?.grade} RISK</Badge>
+                <div className="text-sm text-muted mt-2">{riskData?.risk?.drivers?.[0] || 'Risk within normal range'}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function WorkerRisk({ riskData }) {
+  if (!riskData) return <Spinner />;
+  const { risk, weather, platform } = riskData;
+
+  return (
+    <div>
+      <div className="grid-layout g-2-1 mb-4">
+        <div className="card">
+          <div className="section-title mb-4">AI Risk Score Breakdown</div>
+          <div className="flex items-center gap-5 mb-4">
+            <ScoreRing score={risk.score} size={96} />
+            <div>
+              <div style={{fontFamily:"'Cabinet Grotesk'",fontSize:28,fontWeight:900}}>{Math.round(risk.score * 100)}/100</div>
+              <Badge type={risk.grade==='HIGH'?'danger':risk.grade==='MEDIUM'?'warning':'success'}>{risk.grade} RISK</Badge>
+              <div className="text-sm text-muted mt-2">Updated in real-time</div>
+            </div>
+          </div>
+
+          <div className="ai-bar-item">
+            <div className="ai-bar-label"><span>Weather Risk</span><span style={{fontWeight:600}}>{Math.round(risk.weather_risk*100)}/100</span></div>
+            <div className="ai-bar"><div className="ai-fill" style={{width:`${risk.weather_risk*100}%`,background:'var(--danger)'}}></div></div>
+          </div>
+          <div className="ai-bar-item">
+            <div className="ai-bar-label"><span>AQI Risk</span><span style={{fontWeight:600}}>{Math.round(risk.aqi_risk*100)}/100</span></div>
+            <div className="ai-bar"><div className="ai-fill" style={{width:`${risk.aqi_risk*100}%`,background:'var(--warning)'}}></div></div>
+          </div>
+          <div className="ai-bar-item">
+            <div className="ai-bar-label"><span>Platform Risk</span><span style={{fontWeight:600}}>{Math.round(risk.platform_risk*100)}/100</span></div>
+            <div className="ai-bar"><div className="ai-fill" style={{width:`${risk.platform_risk*100}%`,background:'var(--info)'}}></div></div>
+          </div>
+
+          <div className="mt-4">
+            <div className="section-title mb-2">Risk Drivers</div>
+            {risk.drivers.map((d, i) => (
+              <div key={i} className="alert alert-warning mb-2">
+                <span className="alert-icon">⚠</span> {d}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <div className="card mb-4">
+            <div className="section-title mb-3">Live Conditions</div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2"><span style={{fontSize:20}}>🌧</span><span className="text-sm">Rainfall</span></div>
+              <div>
+                <div style={{fontFamily:"'Cabinet Grotesk'",fontSize:20,fontWeight:900,color: weather.rain_mm_per_hr > 25 ? 'var(--danger)' : 'var(--ink)'}}>{weather.rain_mm_per_hr}mm/hr</div>
+                {weather.rain_mm_per_hr > 25 && <Badge type="danger">Above Threshold</Badge>}
+              </div>
+            </div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2"><span style={{fontSize:20}}>🏭</span><span className="text-sm">AQI</span></div>
+              <div>
+                <div style={{fontFamily:"'Cabinet Grotesk'",fontSize:20,fontWeight:900,color: weather.aqi > 150 ? 'var(--warning)' : 'var(--ink)'}}>{weather.aqi}</div>
+                {weather.aqi > 150 && <Badge type="warning">Unhealthy</Badge>}
+              </div>
+            </div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2"><span style={{fontSize:20}}>🌡</span><span className="text-sm">Temperature</span></div>
+              <div style={{fontFamily:"'Cabinet Grotesk'",fontSize:20,fontWeight:900}}>{weather.temperature_c}°C</div>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2"><span style={{fontSize:20}}>📱</span><span className="text-sm">Order Drop</span></div>
+              <div>
+                <div style={{fontFamily:"'Cabinet Grotesk'",fontSize:20,fontWeight:900,color: platform.order_drop_pct > 35 ? 'var(--danger)' : 'var(--ink)'}}>{platform.order_drop_pct}%</div>
+                {platform.order_drop_pct > 35 && <Badge type="danger">Triggered</Badge>}
+              </div>
+            </div>
+          </div>
+
+          {weather.flood_alert && (
+            <div className="alert alert-danger">
+              <span className="alert-icon">🌊</span>
+              <div><strong>Flood Alert Active</strong><div className="text-sm mt-1">Avoid low-lying areas. Claim may be auto-initiated.</div></div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function WorkerPolicy({ user, policy, riskData, setPolicy, setToast, refreshData }) {
+  const [creating, setCreating] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState('standard');
+  const [triggers, setTriggers] = useState(['rain','aqi','platform','curfew']);
+
+  const toggleTrigger = (t) => setTriggers(prev => prev.includes(t) ? prev.filter(x=>x!==t) : [...prev, t]);
+
+  async function createPolicy() {
+    setCreating(true);
+    const res = await api('/create-policy', 'POST', { user_id: user.user_id, plan: selectedPlan, triggers });
+    setCreating(false);
+    if (res.policy) {
+      setPolicy(res.policy);
+      setToast({ msg: `Policy ${res.policy.id} activated! ₹${res.policy.weekly_premium}/week`, type: 'success' });
+      refreshData();
+    } else {
+      setToast({ msg: res.error || 'Failed to create policy', type: 'danger' });
+    }
+  }
+
+  const premium = riskData?.premium || {};
+  const plans = [
+    { id: 'basic', name: 'Basic', price: 79, max: '₹1,000', features: ['Rain + Flood', 'Curfew alerts', 'Basic fraud protection'] },
+    { id: 'standard', name: 'Standard', price: premium.weekly_premium || 149, max: '₹2,500', popular: true, features: ['All Basic +', 'AQI coverage', 'Platform outages', 'AI fraud detection'] },
+    { id: 'pro', name: 'Pro', price: 229, max: '₹4,000', features: ['All Standard +', 'Heat stress cover', 'Priority payouts', 'Community risk map'] },
+  ];
+
+  const disruptionOpts = [
+    { id: 'rain', icon: '🌧', label: 'Heavy Rain' },
+    { id: 'aqi', icon: '🏭', label: 'High AQI' },
+    { id: 'platform', icon: '📵', label: 'App Outage' },
+    { id: 'curfew', icon: '🚫', label: 'Curfew' },
+    { id: 'heat', icon: '🔥', label: 'Extreme Heat' },
+    { id: 'flood', icon: '🌊', label: 'Flooding' },
+  ];
+
+  return (
+    <div>
+      {policy && (
+        <div className="section">
+          <div className="alert alert-success mb-3">
+            <span className="alert-icon">✓</span>
+            <div>
+              <strong>Active Policy: {policy.id}</strong>
+              <div className="text-sm mt-1">₹{policy.weekly_premium}/week · Coverage ₹{policy.coverage_limit?.toLocaleString()} · {policy.triggers?.join(', ')} triggers active · Renews {new Date(policy.valid_until).toLocaleDateString()}</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="section">
+        <div className="section-title mb-3">Choose Plan</div>
+        <div className="metric-grid g-3">
+          {plans.map(p => (
+            <div key={p.id} onClick={() => setSelectedPlan(p.id)} style={{
+              background: selectedPlan === p.id ? 'var(--brand-light)' : 'var(--bg-2)',
+              border: `1.5px solid ${selectedPlan === p.id ? 'var(--brand)' : 'var(--border)'}`,
+              borderRadius: 'var(--r-lg)', padding: '20px', cursor: 'pointer', transition: 'all 0.15s', position: 'relative'
+            }}>
+              {p.popular && <div style={{position:'absolute',top:0,right:16,background:'var(--brand)',color:'#fff',fontSize:10,fontWeight:700,padding:'3px 10px',borderRadius:'0 0 8px 8px',textTransform:'uppercase',letterSpacing:0.5}}>Popular</div>}
+              <div className="text-xs text-muted mb-1">{p.name.toUpperCase()}</div>
+              <div style={{fontFamily:"'Cabinet Grotesk'",fontSize:26,fontWeight:900,marginBottom:2}}>₹{p.price}<span style={{fontSize:13,fontWeight:500,color:'var(--ink-3)'}}>/wk</span></div>
+              <div className="text-sm text-muted mb-3">Up to {p.max}/week</div>
+              {p.features.map(f => <div key={f} className="text-sm mb-1" style={{color:'var(--ink-2)'}}>✓ {f}</div>)}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid-layout g-2-1">
+        <div className="section card">
+          <div className="section-title mb-3">Select Disruption Triggers</div>
+          <div className="tag-grid">
+            {disruptionOpts.map(d => (
+              <div key={d.id} className={`tag ${triggers.includes(d.id) ? 'active' : ''}`} onClick={() => toggleTrigger(d.id)}>
+                {d.icon} {d.label}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <div className="card mb-4">
+            <div className="section-title mb-3">Premium Breakdown</div>
+            {[
+              { label: 'Base Premium', val: `₹${premium.base || 80}`, cls: '' },
+              { label: 'Rain Risk', val: `+₹${premium.rain_adj || 30}`, cls: 'prem-pos' },
+              { label: 'AQI Risk', val: `+₹${premium.aqi_adj || 16}`, cls: 'prem-pos' },
+              { label: 'Platform Risk', val: `+₹${premium.platform_adj || 3}`, cls: 'prem-pos' },
+              { label: 'Hours Adj.', val: `+₹${premium.hours_adj || 8}`, cls: 'prem-pos' },
+              { label: 'Loyalty Disc.', val: `−₹${premium.loyalty_disc || 15}`, cls: 'prem-neg' },
+              { label: 'ML Discount', val: `−₹${premium.ml_disc || 7}`, cls: 'prem-neg' },
+            ].map(r => (
+              <div key={r.label} className="prem-row">
+                <span className="prem-label">{r.label}</span>
+                <span className={`prem-val ${r.cls}`}>{r.val}</span>
+              </div>
+            ))}
+            <div className="prem-row" style={{borderTop:'1px solid var(--border-2)',marginTop:4,paddingTop:10}}>
+              <span style={{fontWeight:700,color:'var(--ink)'}}>Weekly Premium</span>
+              <span style={{fontFamily:"'Cabinet Grotesk'",fontSize:20,fontWeight:900,color:'var(--brand)'}}>₹{premium.weekly_premium || 149}</span>
+            </div>
+          </div>
+
+          <button className="btn btn-brand btn-full btn-lg" onClick={createPolicy} disabled={creating}>
+            {creating ? '⏳ Creating...' : `Activate Policy — ₹${premium.weekly_premium || 149}/week →`}
+          </button>
+          <div className="text-xs text-muted text-center mt-2">Auto-renews weekly · Cancel anytime</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function WorkerTriggers({ riskData }) {
+  const weather = riskData?.weather || {};
+  const platform = riskData?.platform || {};
+
+  const triggers = [
+    { icon: '🌧', label: 'Heavy Rainfall', city: weather.city, current: `${weather.rain_mm_per_hr}mm/hr`, threshold: '25mm/hr', triggered: weather.rain_mm_per_hr > 25, color: 'var(--danger)' },
+    { icon: '🏭', label: 'Air Quality (AQI)', city: weather.city, current: `AQI ${weather.aqi}`, threshold: 'AQI 150', triggered: weather.aqi > 150, color: 'var(--warning)' },
+    { icon: '📵', label: 'Platform Order Drop', city: weather.city, current: `−${platform.order_drop_pct}%`, threshold: '−35%', triggered: platform.order_drop_pct > 35, color: 'var(--info)' },
+    { icon: '🌡', label: 'Extreme Heat', city: weather.city, current: `${weather.temperature_c}°C`, threshold: '42°C', triggered: weather.temperature_c >= 42, color: 'var(--brand)' },
+    { icon: '🚫', label: 'Curfew / Strike', city: weather.city, current: 'No active alert', threshold: 'Civic alert issued', triggered: false, color: 'var(--success)' },
+  ];
+
+  return (
+    <div>
+      <div className="section">
+        <div className="metric-grid g-4 mb-4">
+          <div className="metric-card">
+            <div className="metric-label">Triggers Monitoring</div>
+            <div className="metric-value">5</div>
+            <div className="metric-sub">All active</div>
+          </div>
+          <div className="metric-card">
+            <div className="metric-label">Currently Triggered</div>
+            <div className="metric-value danger">{triggers.filter(t=>t.triggered).length}</div>
+            <div className="metric-sub">Events active</div>
+          </div>
+          <div className="metric-card">
+            <div className="metric-label">Payout Rate</div>
+            <div className="metric-value">₹50</div>
+            <div className="metric-sub">Per hour lost</div>
+          </div>
+          <div className="metric-card">
+            <div className="metric-label">Last Updated</div>
+            <div className="metric-value" style={{fontSize:18}}>Live</div>
+            <div className="metric-sub"><span className="live-dot" style={{display:'inline-block',width:6,height:6,borderRadius:'50%',background:'var(--success)',marginRight:4}}></span>Real-time</div>
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="section-header">
+            <div className="section-title">Live Parametric Trigger Monitor</div>
+            <div className="live-pill"><span className="live-dot"></span> Live</div>
+          </div>
+          {triggers.map(t => (
+            <div key={t.label} className="disruption-item">
+              <div className="dis-icon" style={{background: t.triggered ? t.color + '22' : 'var(--bg-4)', color: t.triggered ? t.color : 'var(--ink-3)'}}>
+                {t.icon}
+              </div>
+              <div style={{flex:1}}>
+                <div style={{fontWeight:600,fontSize:14,color:'var(--ink)'}}>{t.label}</div>
+                <div className="text-sm text-muted">{t.city} — Current: <strong style={{color:t.triggered?t.color:'var(--ink-2)'}}>{t.current}</strong> / Threshold: {t.threshold}</div>
+              </div>
+              <div style={{textAlign:'right'}}>
+                <Badge type={t.triggered ? 'danger' : 'success'}>{t.triggered ? '⚡ TRIGGERED' : '✓ Normal'}</Badge>
+                {t.triggered && <div className="text-xs text-muted mt-1">Payout eligible</div>}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Auto-claim flow */}
+      {triggers.some(t => t.triggered) && (
+        <div className="card">
+          <div className="section-title mb-3">Auto-Claim Flow (Active)</div>
+          <div className="flow-step">
+            <div className="flow-num flow-done">✓</div>
+            <div className="flow-body"><div className="flow-title">Disruption Detected</div><div className="flow-desc">API threshold breached — auto-claim initiated</div></div>
+          </div>
+          <div className="flow-step">
+            <div className="flow-num flow-done">✓</div>
+            <div className="flow-body"><div className="flow-title">Threshold Validated</div><div className="flow-desc">Cross-verified with IMD / CPCB data</div></div>
+          </div>
+          <div className="flow-step">
+            <div className="flow-num flow-done">✓</div>
+            <div className="flow-body"><div className="flow-title">Fraud Check Passed</div><div className="flow-desc">GPS + activity verified — no anomalies</div></div>
+          </div>
+          <div className="flow-step">
+            <div className="flow-num flow-active">→</div>
+            <div className="flow-body"><div className="flow-title">Payout Processing</div><div className="flow-desc">₹50/hr × hours lost → UPI transfer in progress</div></div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function WorkerClaims({ user, claims, policy, setToast, refreshData }) {
+  const [form, setForm] = useState({ claim_type: 'rain', hours_lost: 2 });
+  const [submitting, setSubmitting] = useState(false);
+  const [lastClaim, setLastClaim] = useState(null);
+
+  const setF = (k, v) => setForm(f => ({...f, [k]: v}));
+
+  async function submitClaim() {
+    if (!policy) { setToast({ msg: 'No active policy. Buy a policy first.', type: 'danger' }); return; }
+    setSubmitting(true);
+    const res = await api('/trigger-claim', 'POST', { user_id: user.user_id, ...form });
+    setSubmitting(false);
+    setLastClaim(res.claim);
+    if (res.claim?.status === 'approved') {
+      setToast({ msg: `Claim approved! ₹${res.claim.payout} payout initiated.`, type: 'success' });
+    } else {
+      setToast({ msg: res.message || 'Claim rejected', type: 'danger' });
+    }
+    refreshData();
+  }
+
+  const payout = Math.min(form.hours_lost * 50, (policy?.coverage_limit || 0) - (policy?.payout_this_week || 0));
+  const estPayout = Math.max(0, payout);
+
+  return (
+    <div>
+      <div className="grid-layout g-2-1">
+        <div>
+          <div className="section card mb-4">
+            <div className="section-title mb-3">File Manual Claim</div>
+            <div className="alert alert-info mb-3">
+              <span className="alert-icon">ℹ</span>
+              <div>Most claims are <strong>zero-touch auto-triggered</strong>. Manual claims are for edge cases not detected by sensors.</div>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Disruption Type</label>
+              <select className="form-select" value={form.claim_type} onChange={e => setF('claim_type', e.target.value)}>
+                <option value="rain">🌧 Heavy Rain</option>
+                <option value="aqi">🏭 High AQI / Pollution</option>
+                <option value="platform">📵 Platform / App Outage</option>
+                <option value="curfew">🚫 Curfew / Strike</option>
+                <option value="heat">🔥 Extreme Heat</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Hours Unable to Work: <strong style={{color:'var(--brand)'}}>{form.hours_lost}</strong></label>
+              <input type="range" min="0.5" max="12" step="0.5" value={form.hours_lost} onChange={e => setF('hours_lost', parseFloat(e.target.value))} />
+            </div>
+
+            <div className="alert alert-success mb-3">
+              <span className="alert-icon">₹</span>
+              <div>
+                <strong>Estimated Payout: ₹{estPayout}</strong>
+                <div className="text-sm mt-1">{form.hours_lost} hrs × ₹50/hr = ₹{form.hours_lost * 50} {payout < form.hours_lost * 50 ? '(limited by remaining coverage)' : ''}</div>
+              </div>
+            </div>
+
+            <button className="btn btn-brand btn-full" onClick={submitClaim} disabled={submitting}>
+              {submitting ? '⏳ Processing...' : 'Submit Claim →'}
+            </button>
+          </div>
+
+          {lastClaim && (
+            <div className="section card">
+              <div className="section-title mb-3">Claim Result — {lastClaim.id}</div>
+              {lastClaim.flow?.map((s, i) => (
+                <div key={i} className="flow-step" style={{paddingBottom:14}}>
+                  <div className={`flow-num flow-${s.status === 'done' ? 'done' : s.status === 'failed' ? 'failed' : 'pending'}`}>
+                    {s.status === 'done' ? '✓' : s.status === 'failed' ? '✕' : i + 1}
+                  </div>
+                  <div className="flow-body">
+                    <div className="flow-title">{s.step}</div>
+                    {s.amount > 0 && <div className="flow-desc text-success">₹{s.amount} → UPI Transfer</div>}
+                  </div>
+                </div>
+              ))}
+              <div className="mt-3">
+                <Badge type={lastClaim.status === 'approved' ? 'success' : 'danger'} style={{fontSize:14}}>
+                  {lastClaim.status.toUpperCase()} {lastClaim.status === 'approved' ? `— ₹${lastClaim.payout} Paid` : ''}
+                </Badge>
+                {lastClaim.fraud_result?.flags?.length > 0 && (
+                  <div className="alert alert-danger mt-2">
+                    <span className="alert-icon">🤖</span>
+                    <div>{lastClaim.fraud_result.flags.join(' · ')}</div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div>
+          <div className="card mb-4">
+            {policy ? (
+              <>
+                <div className="section-title mb-3">Coverage Status</div>
+                <div style={{fontFamily:"'Cabinet Grotesk'",fontSize:28,fontWeight:900,color:'var(--brand)',marginBottom:4}}>₹{policy.payout_this_week?.toLocaleString()}</div>
+                <div className="text-sm text-muted mb-3">of ₹{policy.coverage_limit?.toLocaleString()} used this week</div>
+                <div className="progress-bar mb-2">
+                  <div className="progress-fill" style={{width:`${Math.min(100,(policy.payout_this_week/policy.coverage_limit)*100)}%`,background:'var(--brand)'}}></div>
+                </div>
+                <div className="text-sm text-muted">₹{Math.max(0, policy.coverage_limit - policy.payout_this_week)?.toLocaleString()} remaining</div>
+              </>
+            ) : (
+              <div className="text-center" style={{padding:'20px 0'}}>
+                <div style={{fontSize:32,marginBottom:8}}>🛡</div>
+                <div className="text-muted">No active policy</div>
+              </div>
+            )}
+          </div>
+
+          <div className="card">
+            <div className="section-title mb-3">Claims Summary</div>
+            {[
+              { label: 'Total Claims', val: claims.length },
+              { label: 'Approved', val: claims.filter(c=>c.status==='approved').length, color: 'var(--success)' },
+              { label: 'Rejected', val: claims.filter(c=>c.status==='rejected').length, color: 'var(--danger)' },
+              { label: 'Total Saved', val: `₹${claims.filter(c=>c.status==='approved').reduce((s,c)=>s+c.payout,0).toLocaleString()}`, color: 'var(--success)' },
+            ].map(r => (
+              <div key={r.label} className="flex justify-between items-center" style={{padding:'10px 0',borderBottom:'1px solid var(--border)'}}>
+                <span className="text-sm text-muted">{r.label}</span>
+                <span style={{fontFamily:"'Cabinet Grotesk'",fontWeight:700,color:r.color||'var(--ink)'}}>{r.val}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Claims table */}
+      <div className="section card">
+        <div className="section-title mb-3">All Claims</div>
+        {claims.length === 0 ? (
+          <div className="text-center text-muted" style={{padding:'20px 0'}}>No claims yet.</div>
+        ) : (
+          <div className="table-wrap">
+            <table>
+              <thead><tr><th>Claim ID</th><th>Type</th><th>Trigger</th><th>Hours</th><th>Payout</th><th>Fraud</th><th>Status</th><th>Date</th></tr></thead>
+              <tbody>
+                {claims.map(c => (
+                  <tr key={c.id}>
+                    <td style={{fontWeight:600,color:'var(--ink)',fontFamily:"'Cabinet Grotesk'"}}>{c.id}</td>
+                    <td>{c.claim_type === 'rain' ? '🌧' : c.claim_type === 'aqi' ? '🏭' : c.claim_type === 'platform' ? '📵' : '🚫'} {c.claim_type}</td>
+                    <td>{c.auto_triggered ? <Badge type="info">Auto</Badge> : <Badge type="neutral">Manual</Badge>}</td>
+                    <td>{c.hours_lost}h</td>
+                    <td style={{color:c.payout>0?'var(--success)':'var(--ink-3)',fontWeight:600}}>{c.payout>0?`₹${c.payout}`:'—'}</td>
+                    <td>{c.fraud_result?.is_fraud ? <Badge type="danger">Flagged</Badge> : <Badge type="success">Clear</Badge>}</td>
+                    <td><Badge type={c.status==='approved'?'success':c.status==='rejected'?'danger':'warning'}>{c.status}</Badge></td>
+                    <td className="text-xs text-muted">{new Date(c.date).toLocaleDateString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function WorkerPredictions({ riskData }) {
+  const predictions = riskData?.predictions || [];
+
+  return (
+    <div>
+      <div className="section">
+        <div className="alert alert-info mb-4">
+          <span className="alert-icon">🔮</span>
+          <div><strong>AI Forecast Active</strong> — predictions updated every 3 hours based on IMD, CPCB, and platform data.</div>
+        </div>
+
+        <div className="section-title mb-3">Next 24–48 Hours</div>
+        {predictions.map((p, i) => (
+          <div key={i} className="pred-card">
+            <div className="pred-icon" style={{background: p.severity==='HIGH'?'var(--danger-bg)':p.severity==='MEDIUM'?'var(--warning-bg)':'var(--success-bg)'}}>
+              {p.type.includes('Rain') ? '🌧' : p.type.includes('Air') || p.type.includes('AQI') ? '🏭' : '☀️'}
+            </div>
+            <div style={{flex:1}}>
+              <div className="flex items-center gap-2 mb-1">
+                <span style={{fontWeight:600,fontSize:14}}>{p.type}</span>
+                <Badge type={p.severity==='HIGH'?'danger':p.severity==='MEDIUM'?'warning':'success'}>{p.severity}</Badge>
+                <span className="text-xs text-muted">{p.probability}% probability</span>
+              </div>
+              <div className="text-sm text-muted mb-1">⏰ {p.window}</div>
+              <div className="text-sm" style={{color:'var(--success)'}}>💡 {p.recommended_hours}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="section">
+        <div className="section-title mb-3">Safe Working Hours Recommendation</div>
+        <div className="card">
+          <div className="flex items-center gap-4">
+            <div style={{fontSize:36}}>⏰</div>
+            <div>
+              <div style={{fontFamily:"'Cabinet Grotesk'",fontSize:20,fontWeight:900,marginBottom:4}}>Best: 8AM – 1PM & 7PM – 10PM</div>
+              <div className="text-sm text-muted">Based on rain forecast, peak order hours, and low-AQI windows tomorrow.</div>
+              <div className="text-sm mt-2" style={{color:'var(--warning)'}}>⚠ Avoid 2PM–7PM — heavy rainfall expected</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function WorkerAnalytics({ analytics, claims, policy }) {
+  if (!analytics) return <Spinner />;
+  const disruptionTypes = Object.entries(analytics.by_disruption_type || {});
+
+  return (
+    <div>
+      <div className="section">
+        <div className="metric-grid g-4 mb-4">
+          <div className="metric-card"><div className="metric-label">Total Saved</div><div className="metric-value success">₹{analytics.total_saved?.toLocaleString()}</div><div className="metric-sub">All-time payouts</div></div>
+          <div className="metric-card"><div className="metric-label">Total Claims</div><div className="metric-value">{analytics.total_claims}</div><div className="metric-sub">{analytics.approved_claims} approved</div></div>
+          <div className="metric-card"><div className="metric-label">Coverage Used</div><div className="metric-value brand">{analytics.coverage_utilization}%</div><div className="metric-sub">This week</div></div>
+          <div className="metric-card"><div className="metric-label">Approval Rate</div><div className="metric-value success">{analytics.total_claims > 0 ? Math.round(analytics.approved_claims/analytics.total_claims*100) : 0}%</div><div className="metric-sub">Claims approved</div></div>
+        </div>
+      </div>
+
+      <div className="grid-layout g-2-1">
+        <div className="section card">
+          <div className="section-title mb-3">Disruption Type Analysis</div>
+          {disruptionTypes.length > 0 ? (
+            <ChartBar
+              data={disruptionTypes.map(([,v]) => v.payout)}
+              labels={disruptionTypes.map(([k]) => k)}
+              colors={['#4DA6FF','#F5A623','#FF5C00']}
+            />
+          ) : (
+            <div className="text-center text-muted" style={{padding:'20px 0'}}>No claim data yet</div>
+          )}
+        </div>
+
+        <div className="section card">
+          <div className="section-title mb-3">This Week</div>
+          {policy && (
+            <>
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-sm text-muted">Premium Paid</span>
+                <span style={{fontWeight:700,color:'var(--danger)'}}>₹{policy.weekly_premium}</span>
+              </div>
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-sm text-muted">Payout Received</span>
+                <span style={{fontWeight:700,color:'var(--success)'}}>₹{policy.payout_this_week}</span>
+              </div>
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-sm text-muted">Net Benefit</span>
+                <span style={{fontWeight:700,color: policy.payout_this_week > policy.weekly_premium ? 'var(--success)' : 'var(--ink)'}}>
+                  ₹{policy.payout_this_week - policy.weekly_premium}
+                </span>
+              </div>
+              <div className="progress-bar">
+                <div className="progress-fill" style={{width:`${Math.min(100,(policy.payout_this_week/policy.coverage_limit)*100)}%`,background:'var(--success)'}}></div>
+              </div>
+              <div className="text-xs text-muted mt-1">{Math.round((policy.payout_this_week/policy.coverage_limit)*100)}% coverage utilized</div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// INSURER DASHBOARD
+// ─────────────────────────────────────────────
+function InsurerDashboard({ user, onLogout }) {
+  const [screen, setScreen] = useState('overview');
+  const [overview, setOverview] = useState(null);
+  const [disruptions, setDisruptions] = useState(null);
+  const [fraudData, setFraudData] = useState(null);
+  const [toast, setToast] = useState(null);
+
+  useEffect(() => {
+    Promise.all([
+      api('/insurer/overview'),
+      api('/insurer/disruptions'),
+      api('/insurer/fraud-dashboard')
+    ]).then(([o, d, f]) => {
+      setOverview(o);
+      setDisruptions(d);
+      setFraudData(f);
+    });
+  }, []);
+
+  const navItems = [
+    { id: 'overview', icon: '⬡', label: 'Platform Overview' },
+    { id: 'disruptions', icon: '⚡', label: 'Disruption Monitor' },
+    { id: 'risk', icon: '🧠', label: 'Risk Engine' },
+    { id: 'pricing', icon: '◎', label: 'Pricing Control' },
+    { id: 'fraud', icon: '⊗', label: 'Fraud Dashboard' },
+    { id: 'analytics', icon: '⋯', label: 'Analytics' },
+  ];
+
+  const screenTitles = { overview: 'Platform Overview', disruptions: 'Disruption Monitor', risk: 'AI Risk Engine', pricing: 'Pricing Control', fraud: 'Fraud Dashboard', analytics: 'Analytics' };
+
+  return (
+    <div className="app-shell">
+      {toast && <Toast msg={toast.msg} type={toast.type} onClose={() => setToast(null)} />}
+      <aside className="sidebar">
+        <div className="sidebar-logo">
+          <div className="logo-text">Gig<span className="logo-accent">Shield</span></div>
+          <div className="logo-tagline">Insurer Portal</div>
+        </div>
+        <nav className="sidebar-nav">
+          <div className="sidebar-section-label">Dashboard</div>
+          {navItems.map(n => (
+            <button key={n.id} className={`nav-btn ${screen===n.id?'active':''}`} onClick={() => setScreen(n.id)}>
+              <span className="nav-icon">{n.icon}</span> {n.label}
+            </button>
+          ))}
+        </nav>
+        <div className="sidebar-bottom">
+          <div className="user-card">
+            <div className="user-avatar" style={{background:'#4DA6FF'}}>{(user.name||'I')[0]}</div>
+            <div style={{flex:1,overflow:'hidden'}}>
+              <div className="user-name">{user.name}</div>
+              <div className="user-role-badge">Insurer Admin</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <main className="main-content">
+        <div className="topbar">
+          <div className="topbar-title">{screenTitles[screen]}</div>
+          <div className="topbar-right">
+            <div className="live-pill"><span className="live-dot"></span> {disruptions?.events?.filter(e=>e.triggered).length || 0} Active Events</div>
+            <button className="logout-btn" onClick={onLogout}>Sign Out</button>
+          </div>
+        </div>
+
+        <div className="page fade-up">
+          {!overview ? <Spinner /> : (
+            <>
+              {screen === 'overview' && <InsurerOverview overview={overview} disruptions={disruptions} />}
+              {screen === 'disruptions' && <InsurerDisruptions disruptions={disruptions} />}
+              {screen === 'risk' && <InsurerRisk overview={overview} />}
+              {screen === 'pricing' && <InsurerPricing overview={overview} />}
+              {screen === 'fraud' && <InsurerFraud fraudData={fraudData} setToast={setToast} />}
+              {screen === 'analytics' && <InsurerAnalytics overview={overview} />}
+            </>
+          )}
+        </div>
+      </main>
+    </div>
+  );
+}
+
+function InsurerOverview({ overview, disruptions }) {
+  if (!overview) return <Spinner />;
+  return (
+    <div>
+      <div className="section">
+        <div className="metric-grid g-4 mb-4">
+          <div className="metric-card"><div className="metric-label">Active Policies</div><div className="metric-value">{overview.active_policies?.toLocaleString()}</div><div className="metric-sub metric-up">↑ 18% this week</div></div>
+          <div className="metric-card"><div className="metric-label">Claims Processed</div><div className="metric-value">{overview.claims_processed?.toLocaleString()}</div><div className="metric-sub">Auto-triggered</div></div>
+          <div className="metric-card"><div className="metric-label">Fraud Blocked</div><div className="metric-value danger">{overview.fraud_blocked}</div><div className="metric-sub">₹{(overview.fraud_blocked * 3000)?.toLocaleString()} saved</div></div>
+          <div className="metric-card"><div className="metric-label">Total Payout</div><div className="metric-value success">₹{(overview.total_payout / 100000).toFixed(1)}L</div><div className="metric-sub">Loss ratio {overview.loss_ratio}%</div></div>
+        </div>
+      </div>
+
+      <div className="grid-layout g-2-1">
+        <div>
+          <div className="section card mb-4">
+            <div className="section-header">
+              <div className="section-title">Active Disruption Events</div>
+              <div className="live-pill"><span className="live-dot"></span> Live</div>
+            </div>
+            {disruptions?.events?.length === 0 && <div className="text-muted text-center" style={{padding:'16px 0'}}>No active events</div>}
+            {disruptions?.events?.map((e, i) => (
+              <div key={i} className="disruption-item">
+                <div className="dis-icon" style={{background:e.severity==='HIGH'?'var(--danger-bg)':'var(--warning-bg)'}}>
+                  {e.type.includes('Rain') ? '🌧' : e.type.includes('AQI') ? '🏭' : '📵'}
+                </div>
+                <div style={{flex:1}}>
+                  <div style={{fontWeight:600,fontSize:14}}>{e.type} — {e.city}</div>
+                  <div className="text-sm text-muted">{e.value} · {e.affected_workers} workers affected</div>
+                </div>
+                <Badge type={e.severity==='HIGH'?'danger':'warning'}>{e.severity}</Badge>
+              </div>
+            ))}
+          </div>
+
+          <div className="section card">
+            <div className="section-title mb-3">City Risk Heatmap</div>
+            <div className="heatmap-grid">
+              {Object.entries(overview.city_heatmap || {}).map(([city, data]) => (
+                <div key={city} className="heatmap-cell">
+                  <div style={{fontSize:11,color:'var(--ink-3)',marginBottom:4}}>{city}</div>
+                  <div style={{fontFamily:"'Cabinet Grotesk'",fontSize:20,fontWeight:900,color: data.avg_risk > 0.65 ? 'var(--danger)' : data.avg_risk > 0.45 ? 'var(--warning)' : 'var(--success)'}}>{Math.round(data.avg_risk * 100)}</div>
+                  <div style={{fontSize:10,color:'var(--ink-4)'}}>Risk · {data.policies?.toLocaleString()} policies</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div className="metric-card mb-4" style={{padding:20}}>
+            <div className="metric-label">Weekly Revenue</div>
+            <div className="metric-value success">₹{(overview.total_premium / 100000).toFixed(1)}L</div>
+            <div className="metric-sub">Premium collected</div>
+          </div>
+          <div className="metric-card mb-4" style={{padding:20}}>
+            <div className="metric-label">Loss Ratio</div>
+            <div className="metric-value" style={{color: overview.loss_ratio > 70 ? 'var(--danger)' : 'var(--success)'}}>{overview.loss_ratio}%</div>
+            <div className="metric-sub">{overview.loss_ratio < 60 ? '✓ Healthy' : '⚠ Monitor'}</div>
+          </div>
+          <div className="metric-card" style={{padding:20}}>
+            <div className="metric-label">Total Workers</div>
+            <div className="metric-value">{overview.total_workers?.toLocaleString()}</div>
+            <div className="metric-sub">Across all cities</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function InsurerDisruptions({ disruptions }) {
+  return (
+    <div>
+      <div className="section">
+        <div className="alert alert-info mb-4">
+          <span className="alert-icon">📡</span>
+          <div>Live data from IMD Weather API, CPCB AQI API, Zomato/Swiggy Platform API (mock). Payouts auto-triggered when thresholds are crossed.</div>
+        </div>
+
+        <div className="card">
+          <div className="section-header">
+            <div className="section-title">Live Events — All Cities</div>
+            <div className="live-pill"><span className="live-dot"></span> Monitoring 5 triggers</div>
+          </div>
+          {disruptions?.events?.map((e, i) => (
+            <div key={i} className="disruption-item">
+              <div className="dis-icon" style={{background:e.severity==='HIGH'?'var(--danger-bg)':'var(--warning-bg)', fontSize:18}}>
+                {e.type.includes('Rain') ? '🌧' : e.type.includes('AQI') ? '🏭' : '📵'}
+              </div>
+              <div style={{flex:1}}>
+                <div style={{fontWeight:600,fontSize:14}}>{e.type} — {e.city}</div>
+                <div className="text-sm text-muted">{e.value} · {e.affected_workers?.toLocaleString()} workers affected · Auto-payouts: Active</div>
+              </div>
+              <div style={{textAlign:'right'}}>
+                <Badge type={e.severity === 'HIGH' ? 'danger' : 'warning'}>{e.severity}</Badge>
+                <div className="text-xs text-muted mt-1">⚡ Payout triggered</div>
+              </div>
+            </div>
+          ))}
+          {(!disruptions?.events || disruptions.events.length === 0) && (
+            <div className="text-center text-muted" style={{padding:'20px 0'}}>No active disruptions</div>
+          )}
+        </div>
+      </div>
+
+      <div className="section card">
+        <div className="section-title mb-3">Trigger Thresholds</div>
+        <table>
+          <thead><tr><th>Trigger</th><th>Threshold</th><th>Payout Rate</th><th>Coverage</th></tr></thead>
+          <tbody>
+            {[
+              { trigger: '🌧 Heavy Rain', threshold: '≥ 25mm/hr', rate: '₹50/hr lost', coverage: 'All cities' },
+              { trigger: '🏭 AQI', threshold: 'AQI ≥ 150', rate: '₹50/hr lost', coverage: 'All cities' },
+              { trigger: '📵 Platform Drop', threshold: '≥ 35% order drop', rate: '₹50/hr lost', coverage: 'All cities' },
+              { trigger: '🔥 Extreme Heat', threshold: '≥ 42°C', rate: '₹50/hr lost', coverage: 'Pro plan only' },
+              { trigger: '🚫 Curfew', threshold: 'Civic alert issued', rate: '₹50/hr lost', coverage: 'Standard + Pro' },
+            ].map(r => (
+              <tr key={r.trigger}>
+                <td style={{fontWeight:600,color:'var(--ink)'}}>{r.trigger}</td>
+                <td>{r.threshold}</td>
+                <td style={{color:'var(--success)'}}>{r.rate}</td>
+                <td className="text-muted">{r.coverage}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function InsurerRisk({ overview }) {
+  return (
+    <div>
+      <div className="section">
+        <div className="section-title mb-3">City Risk Heatmap</div>
+        <div className="grid-layout" style={{gridTemplateColumns:'repeat(3, 1fr)'}}>
+          {Object.entries(overview.city_heatmap || {}).map(([city, data]) => {
+            const risk = data.avg_risk;
+            const color = risk > 0.65 ? 'var(--danger)' : risk > 0.45 ? 'var(--warning)' : 'var(--success)';
+            return (
+              <div key={city} className="card" style={{borderColor: color + '44'}}>
+                <div className="flex justify-between items-start mb-3">
+                  <div>
+                    <div style={{fontFamily:"'Cabinet Grotesk'",fontSize:14,fontWeight:800}}>{city}</div>
+                    <div className="text-xs text-muted">{data.policies?.toLocaleString()} policies</div>
+                  </div>
+                  <div style={{fontFamily:"'Cabinet Grotesk'",fontSize:28,fontWeight:900,color}}>{Math.round(risk * 100)}</div>
+                </div>
+                <div className="progress-bar mb-2">
+                  <div className="progress-fill" style={{width:`${risk*100}%`,background:color}}></div>
+                </div>
+                <div className="flex justify-between text-xs text-muted">
+                  <span>{data.claims} claims</span>
+                  <span>₹{data.payout?.toLocaleString()} paid</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="section card">
+        <div className="section-title mb-3">AI Model Performance</div>
+        <div className="metric-grid g-4">
+          {[
+            { label: 'Risk Model Accuracy', val: '94.2%', color: 'var(--success)' },
+            { label: 'Fraud Detection', val: '97.4%', color: 'var(--success)' },
+            { label: 'Trigger Accuracy', val: '99.1%', color: 'var(--success)' },
+            { label: 'Avg Payout Time', val: '4.2 min', color: 'var(--brand)' },
+          ].map(m => (
+            <div key={m.label} className="metric-card">
+              <div className="metric-label">{m.label}</div>
+              <div className="metric-value" style={{color:m.color}}>{m.val}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function InsurerPricing({ overview }) {
+  const [baseP, setBaseP] = useState(80);
+  const [rainMul, setRainMul] = useState(1.2);
+  const [aqiMul, setAqiMul] = useState(1.1);
+
+  return (
+    <div>
+      <div className="grid-layout g-2-1">
+        <div className="section card">
+          <div className="section-title mb-4">Premium Control Panel</div>
+
+          <div className="form-group">
+            <label className="form-label">Base Premium: <strong style={{color:'var(--brand)'}}>₹{baseP}</strong></label>
+            <input type="range" min="20" max="150" value={baseP} onChange={e => setBaseP(+e.target.value)} />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Rain Risk Multiplier: <strong style={{color:'var(--brand)'}}>{rainMul}×</strong></label>
+            <input type="range" min="0.5" max="2.5" step="0.1" value={rainMul} onChange={e => setRainMul(+e.target.value)} />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">AQI Risk Multiplier: <strong style={{color:'var(--brand)'}}>{aqiMul}×</strong></label>
+            <input type="range" min="0.5" max="2.5" step="0.1" value={aqiMul} onChange={e => setAqiMul(+e.target.value)} />
+          </div>
+
+          <div className="card-dark mt-4">
+            <div className="section-title mb-3">Projected Weekly Premiums</div>
+            {['Low Risk', 'Medium Risk', 'High Risk'].map((risk, i) => {
+              const riskMul = [0.7, 1.0, 1.4][i];
+              const premium = Math.round(baseP * riskMul + baseP * (rainMul - 1) * 0.4 + baseP * (aqiMul - 1) * 0.25);
+              return (
+                <div key={risk} className="flex justify-between items-center" style={{padding:'8px 0',borderBottom:'1px solid var(--border)'}}>
+                  <span className="text-sm text-muted">{risk}</span>
+                  <span style={{fontFamily:"'Cabinet Grotesk'",fontWeight:700,color:'var(--brand)'}}>₹{premium}/week</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div>
+          <div className="section metric-card mb-4" style={{padding:20}}>
+            <div className="metric-label">Weekly Revenue</div>
+            <div className="metric-value success">₹{(overview.total_premium / 100000).toFixed(1)}L</div>
+          </div>
+          <div className="section metric-card mb-4" style={{padding:20}}>
+            <div className="metric-label">Weekly Payout</div>
+            <div className="metric-value danger">₹{(overview.total_payout / 100000).toFixed(1)}L</div>
+          </div>
+          <div className="section metric-card" style={{padding:20}}>
+            <div className="metric-label">Loss Ratio</div>
+            <div className="metric-value" style={{color:overview.loss_ratio<60?'var(--success)':'var(--warning)'}}>{overview.loss_ratio}%</div>
+            <div className="metric-sub">{overview.loss_ratio < 60 ? 'Healthy range' : 'Monitor closely'}</div>
+          </div>
+
+          <div className="section card">
+            <div className="section-title mb-3">Revenue vs Payouts</div>
+            <ChartBar
+              data={[overview.total_premium / 100000, overview.total_payout / 100000]}
+              labels={['Revenue', 'Payouts']}
+              colors={['var(--success)', 'var(--danger)']}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function InsurerFraud({ fraudData, setToast }) {
+  if (!fraudData) return <Spinner />;
+
+  async function handleOverride(cid, action) {
+    await api(`/insurer/${action}-claim/${cid}`, 'POST');
+    setToast({ msg: `Claim ${cid} ${action}d successfully`, type: action === 'approve' ? 'success' : 'danger' });
+  }
+
+  return (
+    <div>
+      <div className="section">
+        <div className="metric-grid g-3 mb-4">
+          <div className="metric-card"><div className="metric-label">Fraud Cases</div><div className="metric-value danger">{fraudData.total_fraud}</div></div>
+          <div className="metric-card"><div className="metric-label">Amount Saved</div><div className="metric-value success">₹{fraudData.amount_saved?.toLocaleString()}</div></div>
+          <div className="metric-card"><div className="metric-label">AI Accuracy</div><div className="metric-value">97.4%</div></div>
+        </div>
+      </div>
+
+      <div className="section card">
+        <div className="section-title mb-3">Suspicious Claims</div>
+        {fraudData.fraud_cases?.length === 0 ? (
+          <div className="text-center text-muted" style={{padding:'20px 0'}}>No fraud cases detected</div>
+        ) : (
+          fraudData.fraud_cases?.map((f, i) => (
+            <div key={i} style={{border:'1px solid var(--danger)',borderRadius:'var(--r-md)',padding:16,marginBottom:12,background:'var(--danger-bg)'}}>
+              <div className="flex justify-between items-start mb-2">
+                <div>
+                  <div style={{fontFamily:"'Cabinet Grotesk'",fontWeight:700,fontSize:14,color:'#ff8a8a'}}>{f.claim_id} — {f.user_name}</div>
+                  <div className="text-xs text-muted">{f.claim_type} claim · {new Date(f.date).toLocaleDateString()}</div>
+                </div>
+                <Badge type="danger">Fraud Detected</Badge>
+              </div>
+              {f.flags?.map((flag, j) => (
+                <div key={j} className="text-sm mb-1" style={{color:'#ff8a8a'}}>⚠ {flag}</div>
+              ))}
+              <div className="flex gap-2 mt-3">
+                <button className="btn btn-success btn-sm" onClick={() => handleOverride(f.claim_id, 'approve')}>✓ Approve Override</button>
+                <button className="btn btn-danger btn-sm" onClick={() => handleOverride(f.claim_id, 'reject')}>✕ Confirm Reject</button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+
+function InsurerAnalytics({ overview }) {
+  return (
+    <div>
+      <div className="section">
+        <div className="metric-grid g-4 mb-4">
+          <div className="metric-card"><div className="metric-label">Premium Revenue</div><div className="metric-value success">₹{(overview.total_premium/100000).toFixed(1)}L</div><div className="metric-sub metric-up">↑ 22% wow</div></div>
+          <div className="metric-card"><div className="metric-label">Claims Paid</div><div className="metric-value">₹{(overview.total_payout/100000).toFixed(1)}L</div></div>
+          <div className="metric-card"><div className="metric-label">Loss Ratio</div><div className="metric-value">{overview.loss_ratio}%</div><div className="metric-sub">Healthy ✓</div></div>
+          <div className="metric-card"><div className="metric-label">NPS Score</div><div className="metric-value brand">74</div><div className="metric-sub metric-up">↑ from 61</div></div>
+        </div>
+      </div>
+
+      <div className="section card">
+        <div className="section-title mb-3">Policies by City</div>
+        <ChartBar
+          data={Object.values(overview.city_heatmap || {}).map(d => d.policies)}
+          labels={Object.keys(overview.city_heatmap || {})}
+          colors={['#4DA6FF','#FF5C00','#3DC98B','#F5A623','#A855F7']}
+        />
+      </div>
+
+      <div className="grid-layout g-2-1 mt-4">
+        <div className="section card">
+          <div className="section-title mb-3">Disruption Payouts by City</div>
+          <table>
+            <thead><tr><th>City</th><th>Policies</th><th>Claims</th><th>Total Payout</th><th>Avg Risk</th></tr></thead>
+            <tbody>
+              {Object.entries(overview.city_heatmap || {}).map(([city, d]) => (
+                <tr key={city}>
+                  <td style={{fontWeight:600,color:'var(--ink)'}}>{city}</td>
+                  <td>{d.policies?.toLocaleString()}</td>
+                  <td>{d.claims}</td>
+                  <td style={{color:'var(--success)'}}>₹{d.payout?.toLocaleString()}</td>
+                  <td><Badge type={d.avg_risk>0.65?'danger':d.avg_risk>0.45?'warning':'success'}>{Math.round(d.avg_risk*100)}</Badge></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="section card">
+          <div className="section-title mb-3">Income Protection Stats</div>
+          {[
+            { label: 'Workers Protected', val: overview.active_policies?.toLocaleString() },
+            { label: 'Avg. Payout Time', val: '4.2 min' },
+            { label: 'Zero-Touch Claims', val: '89%' },
+            { label: 'Weekly Renewal Rate', val: '88%' },
+            { label: 'Fraud Rate', val: '1.1%' },
+          ].map(s => (
+            <div key={s.label} className="flex justify-between items-center" style={{padding:'10px 0',borderBottom:'1px solid var(--border)'}}>
+              <span className="text-sm text-muted">{s.label}</span>
+              <span style={{fontFamily:"'Cabinet Grotesk'",fontWeight:700,color:'var(--ink)'}}>{s.val}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// ROOT APP
+// ─────────────────────────────────────────────
+function App() {
+  const [authUser, setAuthUser] = useState(null);
+
+  function handleLogin(userData) {
+    setAuthUser(userData);
+  }
+
+  function handleLogout() {
+    setAuthUser(null);
+  }
+
+  if (!authUser) return <AuthScreen onLogin={handleLogin} />;
+  if (authUser.role === 'insurer') return <InsurerDashboard user={authUser} onLogout={handleLogout} />;
+  return <WorkerDashboard user={authUser} onLogout={handleLogout} />;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
