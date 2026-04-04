@@ -1,7 +1,7 @@
 # 🚀 Vayurox — AI-Powered Parametric Insurance for Gig Workers
 
 **“From claims to code — Vayurox redefines insurance with AI.”**
-
+Try Out Link - https://neon-naiad-488707.netlify.app/
 ---
 
 ## 📖 Overview
