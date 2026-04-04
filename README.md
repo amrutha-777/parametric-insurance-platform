@@ -1,12 +1,12 @@
-# 🚀 GigShield — AI-Powered Parametric Insurance for Gig Workers
+# 🚀 Vayurox — AI-Powered Parametric Insurance for Gig Workers
 
-**“From claims to code — GigShield redefines insurance with AI.”**
+**“From claims to code — Vayurox redefines insurance with AI.”**
 
 ---
 
 ## 📖 Overview
 
-GigShield is an AI-powered parametric insurance platform designed for India’s gig economy workers (Zomato, Swiggy, Blinkit, etc.).
+Vayurox is an AI-powered parametric insurance platform designed for India’s gig economy workers (Zomato, Swiggy, Blinkit, etc.).
 
 It protects delivery partners from income loss caused by external disruptions such as heavy rainfall, high air pollution (AQI), platform outages, and local restrictions — through **instant, automated payouts with zero manual claims**.
 
@@ -42,13 +42,13 @@ Delivery partners depend on daily earnings. However, external disruptions can re
 
 Ravi, a delivery partner, logs in during peak hours. Sudden heavy rain reduces orders drastically. He loses his daily income with no backup.
 
-👉 GigShield ensures **automatic compensation** for such losses.
+👉 Vayurox ensures **automatic compensation** for such losses.
 
 ---
 
 ## 🚀 Solution
 
-GigShield uses **AI + Parametric Insurance** to:
+Vayurox uses **AI + Parametric Insurance** to:
 
 - Provide weekly subscription-based insurance  
 - Monitor real-time disruption data  
@@ -260,10 +260,65 @@ Automatic payout when:
 
 ## 🌍 Impact
 
-GigShield transforms insurance from a **manual, slow process** into a **fully automated income protection system**, making financial security accessible to millions of gig workers.
+Vayurox transforms insurance from a **manual, slow process** into a **fully automated income protection system**, making financial security accessible to millions of gig workers.
+
+---
+## ▶️ How to Run Locally
+
+### 🔧 Backend (Flask)
+
+1. Navigate to backend folder:
+cd backend
+
+2. Install dependencies:
+pip install -r requirements.txt
+
+3. Run the server:
+python app.py
+
+Backend will run on:
+http://127.0.0.1:5000/
+
+---
+
+### 🌐 Frontend
+
+Simple HTML:
+cd frontend
+Open index.html or use Live Server (VS Code)
+
+React (if applicable):
+npm install
+npm start
+
+---
+
+### 🔗 Connect Frontend & Backend
+
+Ensure API calls use:
+http://127.0.0.1:5000/api/...
+
+---
+
+### ⚠️ Common Issues
+
+CORS Error:
+from flask_cors import CORS
+CORS(app)
+
+Module not found:
+pip install <module-name>
+
+---
+
+### ✅ Steps to Run
+
+1. Start backend  
+2. Open frontend  
+3. Use the application 🎉
 
 ---
 
 ## 🏆 Final Note
 
-GigShield bridges the gap between **technology and financial safety**, ensuring gig workers are protected when they need it the most.
+Vayurox bridges the gap between **technology and financial safety**, ensuring gig workers are protected when they need it the most.
