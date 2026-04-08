@@ -1,11 +1,11 @@
-# 🚀 Vayurox — AI-Powered Parametric Insurance for Gig Workers
+#  Vayurox — AI-Powered Parametric Insurance for Gig Workers
 
 **“From claims to code — Vayurox redefines insurance with AI.”**
 ---
 Try Out Link - https://neon-naiad-488707.netlify.app/
 ---
 
-## 📖 Overview
+##  Overview
 
 Vayurox is an AI-powered parametric insurance platform designed for India’s gig economy workers (Zomato, Swiggy, Blinkit, etc.).
 
@@ -13,23 +13,23 @@ It protects delivery partners from income loss caused by external disruptions su
 
 ---
 
-## 💡 Problem Statement
+##  Problem Statement
 
 Delivery partners depend on daily earnings. However, external disruptions can reduce their income by **20–30%**, including:
 
-- 🌧️ Heavy rainfall  
-- 🌫️ High AQI (pollution)  
-- ⚙️ Platform outages  
-- 🚫 Curfews / zone restrictions  
+-  Heavy rainfall  
+-  High AQI (pollution)  
+-  Platform outages  
+-  Curfews / zone restrictions  
 
-### ❌ Current Issues
+###  Current Issues
 - No income protection system  
 - Insurance claims are slow and manual  
 - Workers bear full financial risk  
 
 ---
 
-## 👤 Target Persona
+##  Target Persona
 
 ### Food Delivery Partners (Zomato / Swiggy)
 
@@ -43,11 +43,11 @@ Delivery partners depend on daily earnings. However, external disruptions can re
 
 Ravi, a delivery partner, logs in during peak hours. Sudden heavy rain reduces orders drastically. He loses his daily income with no backup.
 
-👉 Vayurox ensures **automatic compensation** for such losses.
+ Vayurox ensures **automatic compensation** for such losses.
 
 ---
 
-## 🚀 Solution
+##  Solution
 
 Vayurox uses **AI + Parametric Insurance** to:
 
@@ -59,7 +59,7 @@ Vayurox uses **AI + Parametric Insurance** to:
 
 ---
 
-## ⚙️ Workflow (System Flow)
+##  Workflow (System Flow)
 
 1. User registers on the platform  
 2. Selects a weekly insurance plan  
@@ -74,7 +74,7 @@ Vayurox uses **AI + Parametric Insurance** to:
 
 ---
 
-## 💰 Payout Model
+##  Payout Model
 
 **Formula:**
 Payout = Hours Lost × ₹50
@@ -85,7 +85,7 @@ Payout = Hours Lost × ₹50
 
 ---
 
-## 📊 AI-Based Pricing Model
+##  AI-Based Pricing Model
 
 | Risk Level   | Area Type        | Weekly Premium |
 |-------------|----------------|----------------|
@@ -93,14 +93,14 @@ Payout = Hours Lost × ₹50
 | Medium Risk | Moderate zones  | ₹35/week       |
 | High Risk   | Flood-prone     | ₹50/week       |
 
-### 🧠 AI Logic
+###  AI Logic
 - Uses historical weather + disruption data  
 - Predicts probability of income loss  
 - Dynamically adjusts premium pricing  
 
 ---
 
-## ⚡ Parametric Triggers
+##  Parametric Triggers
 
 Automatic payout when:
 
@@ -109,11 +109,11 @@ Automatic payout when:
 - Orders drop ≥ threshold  
 - Flood alerts / curfew issued  
 
-👉 No manual claim required
+  No manual claim required
 
 ---
 
-## 🤖 AI/ML Integration
+##  AI/ML Integration
 
 - Risk prediction model  
 - Dynamic pricing engine  
@@ -123,15 +123,15 @@ Automatic payout when:
 
 ---
 
-## 🔐 Fraud Detection & Security
+##  Fraud Detection & Security
 
 ### Multi-Layer Protection
 
-- 📍 Multi-source location verification (GPS + network)  
-- 📊 Anomaly detection (unusual claim patterns)  
-- 🧑‍🤝‍🧑 Fraud ring detection  
-- 📱 Device fingerprinting  
-- 🔄 Cross-verification with APIs  
+-  Multi-source location verification (GPS + network)  
+-  Anomaly detection (unusual claim patterns)  
+-  Fraud ring detection  
+-  Device fingerprinting  
+-  Cross-verification with APIs  
 
 ### Trust Score System
 - Each user gets a reliability score  
@@ -140,35 +140,35 @@ Automatic payout when:
 
 ---
 
-## 🧠 Smart Features
+##  Smart Features
 
-### 🔹 Hyperlocal Risk Mapping
+###  Hyperlocal Risk Mapping
 - City divided into risk zones  
 - AI identifies high-risk areas  
 
-### 🔹 Income Prediction
+###  Income Prediction
 - Estimates expected earnings  
 - Ensures fair compensation  
 
-### 🔹 Lost Work Hours Calculation
+###  Lost Work Hours Calculation
 - Calculates actual income loss  
 
-### 🔹 Smart Pause Mode
+###  Smart Pause Mode
 - Alerts workers during risky conditions  
 - Encourages safety  
 
 ---
 
-## 📊 Dashboards
+##  Dashboards
 
-### 👷 Worker Dashboard
+###  Worker Dashboard
 - Active insurance plan  
 - Earnings protection  
 - Claim history  
 - Risk score  
 - Live disruption tracking  
 
-### 🏢 Insurer Dashboard
+###  Insurer Dashboard
 - Platform analytics  
 - Fraud alerts  
 - Risk heatmaps  
@@ -176,7 +176,7 @@ Automatic payout when:
 
 ---
 
-## 🏗️ Tech Stack
+##  Tech Stack
 
 ### Frontend
 - React (integrated in HTML)  
@@ -198,7 +198,7 @@ Automatic payout when:
 
 ---
 
-## 🔗 API Endpoints
+##  API Endpoints
 
 | Method | Endpoint                 | Description       |
 | ------ | ------------------------ | ----------------- |
@@ -212,14 +212,14 @@ Automatic payout when:
 
 ---
 
-## 🌐 Deployment
+##  Deployment
 
 - Frontend → Netlify  
 - Backend → Flask server  
 
 ---
 
-## 🎥 Demo Credentials
+##  Demo Credentials
 
 ### Worker
 - Email: ravi@demo.com  
@@ -231,7 +231,7 @@ Automatic payout when:
 
 ---
 
-## 🚧 Challenges Faced
+##  Challenges Faced
 
 - Designing realistic parametric triggers  
 - Simulating real-world APIs  
@@ -240,7 +240,7 @@ Automatic payout when:
 
 ---
 
-## 📚 What We Learned
+##  What We Learned
 
 - Parametric insurance systems  
 - AI-based risk modeling  
@@ -249,7 +249,7 @@ Automatic payout when:
 
 ---
 
-## 🔮 Future Improvements
+## Future Improvements
 
 - Real weather & AQI API integration  
 - Payment gateway (Razorpay/UPI)  
@@ -259,14 +259,14 @@ Automatic payout when:
 
 ---
 
-## 🌍 Impact
+##  Impact
 
 Vayurox transforms insurance from a **manual, slow process** into a **fully automated income protection system**, making financial security accessible to millions of gig workers.
 
 ---
-## ▶️ How to Run Locally
+##  How to Run Locally
 
-### 🔧 Backend (Flask)
+###  Backend (Flask)
 
 1. Navigate to backend folder:
 cd backend
@@ -282,7 +282,7 @@ http://127.0.0.1:5000/
 
 ---
 
-### 🌐 Frontend
+###  Frontend
 
 Simple HTML:
 cd frontend
@@ -294,14 +294,14 @@ npm start
 
 ---
 
-### 🔗 Connect Frontend & Backend
+### Connect Frontend & Backend
 
 Ensure API calls use:
 http://127.0.0.1:5000/api/...
 
 ---
 
-### ⚠️ Common Issues
+###  Common Issues
 
 CORS Error:
 from flask_cors import CORS
@@ -312,7 +312,7 @@ pip install <module-name>
 
 ---
 
-### ✅ Steps to Run
+### Steps to Run
 
 1. Start backend  
 2. Open frontend  
@@ -320,6 +320,6 @@ pip install <module-name>
 
 ---
 
-## 🏆 Final Note
+##  Final Note
 
 Vayurox bridges the gap between **technology and financial safety**, ensuring gig workers are protected when they need it the most.
